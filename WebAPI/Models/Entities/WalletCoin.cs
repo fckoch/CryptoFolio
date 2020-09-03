@@ -7,8 +7,9 @@ namespace CryptoFolio.Models.Entities
 {
     public class WalletCoin
     {
-        public Coin Bitcoin { get; set; }
-        public Coin Ethereum { get; set; }
-        public Coin Litecoin { get; set; }
+        public int Id { get; set; }
+        public virtual Coin Coin { get; set; }
+        public decimal ValueWhenBought { get; set; }
+        public DateTime BuyDate { get; set; }
     }
 }

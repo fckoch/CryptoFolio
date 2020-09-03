@@ -8,7 +8,7 @@ namespace CryptoFolio.Models.Entities
 {
     public class Wallet
     {
-        public int WalletId { get; set; }
-        public WalletCoin Walletcoin { get; set; }
+        public int Id { get; set; }
+        public ICollection<WalletCoin> Walletcoins { get; set; }
     }
 }
