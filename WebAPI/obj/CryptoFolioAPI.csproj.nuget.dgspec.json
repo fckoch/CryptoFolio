@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\Web API.csproj": {}
+    "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\CryptoFolioAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\Web API.csproj": {
+    "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\CryptoFolioAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\Web API.csproj",
-        "projectName": "Web API",
-        "projectPath": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\Web API.csproj",
+        "projectUniqueName": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\CryptoFolioAPI.csproj",
+        "projectName": "CryptoFolioAPI",
+        "projectPath": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\CryptoFolioAPI.csproj",
         "packagesPath": "C:\\Users\\filip\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",

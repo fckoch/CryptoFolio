@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "+f5ROjZH7Wbw+Qmkj8PWIktNhZSs3RtpoLjU15JajUUBqOQrW2nzd/ftfFjCaSQrzrStvzGuiDM6QK7qsZnXhA==",
+  "dgSpecHash": "vaWXFZqHuvkn1qKMh9Rd6PjcftbbuWX2PfYM0+ypQakE0es/VnnZspa7BJswGSe0bry8YS+JIfJnx92Tr24fKA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\filip\\source\\repos\\WebAPI\\WebAPI\\Web APi.csproj",
+  "projectFilePath": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\CryptoFolioAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.aspnetcore.razor\\2.2.0\\microsoft.aspnetcore.razor.2.2.0.nupkg.sha512",

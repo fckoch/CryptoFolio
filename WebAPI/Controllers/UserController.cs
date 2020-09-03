@@ -6,7 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CryptoFolio.Data;
-using CryptoFolio.Data.Entities;
+using CryptoFolio.Models.Entities;
+using CryptoFolio.Services;
 
 namespace CryptoFolio.Controllers
 {
@@ -15,10 +16,12 @@ namespace CryptoFolio.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserContext _context;
+        private UserService _userService;
 
-        public UserController(UserContext context)
+        public UserController(UserContext context, UserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         // GET: api/User
@@ -61,7 +64,7 @@ namespace CryptoFolio.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!_userService.UserExists(id))
                 {
                     return NotFound();
                 }
@@ -102,9 +105,12 @@ namespace CryptoFolio.Controllers
             return user;
         }
 
-        private bool UserExists(int id)
+        // Alocar metodo em uma classe User service (pasta Services)
+        // Injetar user service no startup
+
+        /*private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserId == id);
-        }
+        }*/
     }
 }

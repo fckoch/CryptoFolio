@@ -8826,11 +8826,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\filip\\source\\repos\\WebAPI\\WebAPI\\Web APi.csproj",
-      "projectName": "Web APi",
-      "projectPath": "C:\\Users\\filip\\source\\repos\\WebAPI\\WebAPI\\Web APi.csproj",
+      "projectUniqueName": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\CryptoFolioAPI.csproj",
+      "projectName": "CryptoFolioAPI",
+      "projectPath": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\CryptoFolioAPI.csproj",
       "packagesPath": "C:\\Users\\filip\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\filip\\source\\repos\\WebAPI\\WebAPI\\obj\\",
+      "outputPath": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\WebAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\filip\\AppData\\Roaming\\NuGet\\NuGet.Config",

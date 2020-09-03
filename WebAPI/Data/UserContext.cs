@@ -1,4 +1,4 @@
-﻿using CryptoFolio.Data.Entities;
+﻿using CryptoFolio.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
