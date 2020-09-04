@@ -1,11 +1,11 @@
-﻿using CryptoFolio.Models.Entities;
+﻿using CryptoFolioAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoFolio.Data
+namespace CryptoFolioAPI.Data
 {
     public class UserContext : DbContext
     {

@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoFolio.Models.Entities
+namespace CryptoFolioAPI.Models.Entities
 {
     public class Wallet
     {
-        public int Id { get; set; }
-        public ICollection<WalletCoin> Walletcoins { get; set; }
+        public int WalletId { get; set; }
+        public virtual ICollection<WalletCoin> Walletcoins { get; set; }
     }
 }

@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CryptoFolio.Data;
+using CryptoFolioAPI.Data;
+using CryptoFolioAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace WebAPI
 {
@@ -29,6 +31,8 @@ namespace WebAPI
         {
             services.AddControllers();
             services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CryptoFolio")));
+            services.AddScoped<UserService>();
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

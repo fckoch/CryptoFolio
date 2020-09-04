@@ -5,112 +5,69 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CryptoFolio.Data;
-using CryptoFolio.Models.Entities;
-using CryptoFolio.Services;
+using CryptoFolioAPI.Data;
+using CryptoFolioAPI.Models.Entities;
+using CryptoFolioAPI.Services;
+using CryptoFolioAPI.Models;
+using AutoMapper;
 
-namespace CryptoFolio.Controllers
+namespace CryptoFolioAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserContext _context;
-        private UserService _userService;
+        private readonly UserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(UserContext context, UserService userService)
+
+        public UserController(UserService userService, IMapper mapper)
         {
-            _context = context;
             _userService = userService;
+            _mapper = mapper;
         }
 
-        // GET: api/User
+        //GET (all users)
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<UserModel[]>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
-        }
-
-        // GET: api/User/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
-
-        // PUT: api/User/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
-        {
-            if (id != user.UserId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var users = await _userService.GetAllUsersAsync();
+                return _mapper.Map<UserModel[]>(users);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!_userService.UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");  
             }
-
-            return NoContent();
         }
 
-        // POST: api/User
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
-        {
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+        //GET (user by id)
 
-            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
-        }
-
-        // DELETE: api/User/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> DeleteUser(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<UserModel>> GetUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            try
             {
-                return NotFound();
+
+                return await _userService.GetUserAsync2<UserModel>(id);
+
+                /*var user  = await _userService.GetUserAsync(id);
+
+                if (user == null) return NotFound();
+
+                return _mapper.Map<UserModel>(user);*/
             }
+            catch (Exception)
+            {
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return user;
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+            }
         }
 
-        // Alocar metodo em uma classe User service (pasta Services)
-        // Injetar user service no startup
 
-        /*private bool UserExists(int id)
-        {
-            return _context.Users.Any(e => e.UserId == id);
-        }*/
+        //POST
     }
 }
