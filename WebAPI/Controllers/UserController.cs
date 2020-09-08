@@ -13,8 +13,8 @@ using AutoMapper;
 
 namespace CryptoFolioAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly UserService _userService;
@@ -37,10 +37,10 @@ namespace CryptoFolioAPI.Controllers
                 var users = await _userService.GetAllUsersAsync();
                 return _mapper.Map<UserModel[]>(users);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");  
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
             }
         }
 
@@ -51,23 +51,40 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-
-                return await _userService.GetUserAsync2<UserModel>(id);
-
-                /*var user  = await _userService.GetUserAsync(id);
-
+                var user = await _userService.GetUserAsync(id);
                 if (user == null) return NotFound();
 
-                return _mapper.Map<UserModel>(user);*/
+                return _mapper.Map<UserModel>(user);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                return this.StatusCode(StatusCodes.Status500InternalServerError, "Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
             }
         }
 
 
-        //POST
+        //POST (user)
+
+        public async Task<ActionResult<UserModel>> Post(UserRegisterModel model)
+        {
+            try
+            {
+                // Create new User
+                var user = _mapper.Map<User>(model);
+                user.Wallet = new Wallet();
+                _userService.Add(user);
+
+                if (await _userService.SaveChangesAsync())
+                {
+                    return Created($"api/user/{user.UserId}", _mapper.Map<UserModel>(user));
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+
+            return BadRequest();
+        }
     }
 }

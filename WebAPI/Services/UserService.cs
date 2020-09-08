@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CryptoFolioAPI.Data;
+using CryptoFolioAPI.Models;
 using CryptoFolioAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -36,12 +37,48 @@ namespace CryptoFolioAPI.Services
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<T> GetUserAsync2<T>(int Id)
+        public async Task<WalletCoin> GetWalletCoinAsync(int WalletId, int WalletCoinId)
         {
-            IQueryable<User> query = _context.Users;
-            query = query.Where(c => c.UserId == Id);
+            IQueryable<WalletCoin> query = _context.WalletCoins;
 
-            return await _mapper.ProjectTo<T>(query).FirstOrDefaultAsync();
+            query = query.Where(wc => wc.WalletId == WalletId && wc.WalletCoinId == WalletCoinId).Include(wc => wc.Coin);
+
+            return await query.FirstOrDefaultAsync();
+
+        }
+
+        public async Task<WalletCoin[]> GetWalletCoinsAsync(int WallteId)
+        {
+            IQueryable<WalletCoin> query = _context.WalletCoins;
+
+            query = query.Where(wc => wc.WalletId == WallteId).Include(wc => wc.Coin);
+
+            return await query.ToArrayAsync();
+        }
+
+        public void Add(User entity)
+        {
+            _context.Users.Add(entity);
+        }
+
+        public async Task<Coin[]> GetAllCoinsAsync()
+        {
+            IQueryable<Coin> query = _context.Coin;
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Coin> GetCoinAsync(int Id)
+        {
+            IQueryable<Coin> query = _context.Coin;
+            query = query.Where(c => c.CoinId == Id);
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            // Only returns success if at least one row was changed
+            return (await _context.SaveChangesAsync()) > 0;
         }
 
         public bool UserExists(int id)

@@ -10,5 +10,6 @@ namespace CryptoFolioAPI.Models.Entities
     {
         public int WalletId { get; set; }
         public virtual ICollection<WalletCoin> Walletcoins { get; set; }
+        public int UserId { get; set; }
     }
 }

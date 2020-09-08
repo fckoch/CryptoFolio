@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoFolioAPI.Models.Entities
+namespace CryptoFolioAPI.Models
 {
-    public class Coin
+    public class CoinModel
     {
         public int CoinId { get; set; }
         public string CoinName { get; set; }

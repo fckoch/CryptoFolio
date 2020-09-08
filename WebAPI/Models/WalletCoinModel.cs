@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoFolioAPI.Models.Entities
+namespace CryptoFolioAPI.Models
 {
-    public class Coin
+    public class WalletCoinModel
     {
+        public int WalletCoinId { get; set; }
         public int CoinId { get; set; }
         public string CoinName { get; set; }
-        [Column(TypeName = "decimal(18,4)")]
+        public DateTime BuyDate { get; set; }
+        public decimal ValueWhenBought { get; set; }
         public decimal CurrentValue { get; set; }
+        public int WalletId { get; set; }
     }
 }

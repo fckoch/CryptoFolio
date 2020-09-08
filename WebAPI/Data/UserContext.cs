@@ -15,5 +15,8 @@ namespace CryptoFolioAPI.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<WalletCoin> WalletCoins { get; set; }
+        public DbSet<Coin> Coin { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using CryptoFolioAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CryptoFolioAPI.Migrations
 {
     [DbContext(typeof(UserContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20200904211057_UpdateDB")]
+    partial class UpdateDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,11 +28,11 @@ namespace CryptoFolioAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CoinName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<decimal>("CurrentValue")
                         .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CoinId");
 
@@ -79,7 +81,7 @@ namespace CryptoFolioAPI.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Wallets");
+                    b.ToTable("Wallet");
                 });
 
             modelBuilder.Entity("CryptoFolioAPI.Models.Entities.WalletCoin", b =>
@@ -98,7 +100,7 @@ namespace CryptoFolioAPI.Migrations
                     b.Property<decimal>("ValueWhenBought")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<int>("WalletId")
+                    b.Property<int?>("WalletId")
                         .HasColumnType("int");
 
                     b.HasKey("WalletCoinId");
@@ -107,7 +109,7 @@ namespace CryptoFolioAPI.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("WalletCoins");
+                    b.ToTable("WalletCoin");
                 });
 
             modelBuilder.Entity("CryptoFolioAPI.Models.Entities.Wallet", b =>
@@ -129,9 +131,7 @@ namespace CryptoFolioAPI.Migrations
 
                     b.HasOne("CryptoFolioAPI.Models.Entities.Wallet", null)
                         .WithMany("Walletcoins")
-                        .HasForeignKey("WalletId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WalletId");
                 });
 #pragma warning restore 612, 618
         }
