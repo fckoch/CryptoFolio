@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Data
 {
-    public class UserContext : DbContext
+    public class CryptoFolioContext : DbContext
     {
-        public UserContext(DbContextOptions<UserContext> options) : base(options)
+        public CryptoFolioContext(DbContextOptions<CryptoFolioContext> options) : base(options)
         {
 
         }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Models
 {
-    public class WalletCoinModel
+    public class OutputWalletCoinModel
     {
         public int WalletCoinId { get; set; }
         public int CoinId { get; set; }
@@ -13,6 +13,5 @@ namespace CryptoFolioAPI.Models
         public DateTime BuyDate { get; set; }
         public decimal ValueWhenBought { get; set; }
         public decimal CurrentValue { get; set; }
-        public int WalletId { get; set; }
     }
 }

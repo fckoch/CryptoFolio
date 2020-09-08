@@ -15,13 +15,13 @@ namespace CryptoFolioAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly UserService _userService;
         private readonly IMapper _mapper;
 
 
-        public UserController(UserService userService, IMapper mapper)
+        public UsersController(UserService userService, IMapper mapper)
         {
             _userService = userService;
             _mapper = mapper;
@@ -30,12 +30,12 @@ namespace CryptoFolioAPI.Controllers
         //GET (all users)
 
         [HttpGet]
-        public async Task<ActionResult<UserModel[]>> GetAllUsers()
+        public async Task<ActionResult<OutputUserModel[]>> GetAllUsers()
         {
             try
             {
                 var users = await _userService.GetAllUsersAsync();
-                return _mapper.Map<UserModel[]>(users);
+                return _mapper.Map<OutputUserModel[]>(users);
             }
             catch (Exception ex)
             {
@@ -47,14 +47,14 @@ namespace CryptoFolioAPI.Controllers
         //GET (user by id)
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<UserModel>> GetUser(int id)
+        public async Task<ActionResult<OutputUserModel>> GetUser(int id)
         {
             try
             {
                 var user = await _userService.GetUserAsync(id);
                 if (user == null) return NotFound();
 
-                return _mapper.Map<UserModel>(user);
+                return _mapper.Map<OutputUserModel>(user);
             }
             catch (Exception ex)
             {
@@ -65,7 +65,7 @@ namespace CryptoFolioAPI.Controllers
 
         //POST (user)
 
-        public async Task<ActionResult<UserModel>> Post(UserRegisterModel model)
+        public async Task<ActionResult<OutputUserModel>> Post(InputUserModel model)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace CryptoFolioAPI.Controllers
 
                 if (await _userService.SaveChangesAsync())
                 {
-                    return Created($"api/user/{user.UserId}", _mapper.Map<UserModel>(user));
+                    return Created($"api/user/{user.UserId}", _mapper.Map<OutputUserModel>(user));
                 }
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CryptoFolioAPI.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(CryptoFolioContext))]
     [Migration("20200905203814_WalletCoinChange2")]
     partial class WalletCoinChange2
     {

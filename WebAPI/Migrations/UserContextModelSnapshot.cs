@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CryptoFolioAPI.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(CryptoFolioContext))]
     partial class UserContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

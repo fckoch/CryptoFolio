@@ -16,12 +16,12 @@ namespace CryptoFolioAPI.Controllers
     [Route("api/coins")]
     public class CoinController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly CoinService _coinService;
         private readonly IMapper _mapper;
 
-        public CoinController(UserService userService, IMapper mapper)
+        public CoinController(CoinService coinService, IMapper mapper)
         {
-            _userService = userService;
+            _coinService = coinService;
             _mapper = mapper;
         }
 
@@ -31,7 +31,7 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-                var coins = await _userService.GetAllCoinsAsync();
+                var coins = await _coinService.GetAllCoinsAsync();
                 return _mapper.Map<CoinModel[]>(coins);
             }
             catch (Exception ex)
@@ -45,7 +45,7 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-                var coin = await _userService.GetCoinAsync(id);
+                var coin = await _coinService.GetCoinAsync(id);
                 return _mapper.Map<CoinModel>(coin);
             }
             catch (Exception ex)

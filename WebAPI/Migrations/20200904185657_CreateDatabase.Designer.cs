@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CryptoFolioAPI.Migrations
 {
-    [DbContext(typeof(UserContext))]
+    [DbContext(typeof(CryptoFolioContext))]
     [Migration("20200904185657_CreateDatabase")]
     partial class CreateDatabase
     {

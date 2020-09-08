@@ -30,8 +30,11 @@ namespace WebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CryptoFolio")));
+            services.AddDbContext<CryptoFolioContext>(options => options.UseSqlServer(Configuration.GetConnectionString("CryptoFolio")));
             services.AddScoped<UserService>();
+            services.AddScoped<WalletService>();
+            services.AddScoped<WalletCoinService>();
+            services.AddScoped<CoinService>();
             services.AddAutoMapper(typeof(Startup));
         }
 

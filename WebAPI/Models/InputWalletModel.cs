@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Models
 {
-    public class WalletModel
+    public class InputWalletModel
     {
         public int WalletId { get; set; }
-        public virtual ICollection<WalletCoinModel> Walletcoins { get; set; }
+        public virtual ICollection<InputWalletCoinModel> Walletcoins { get; set; }
     }
 }

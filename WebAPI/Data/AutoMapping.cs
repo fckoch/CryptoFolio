@@ -12,21 +12,29 @@ namespace CryptoFolioAPI.Data
     {
         public AutoMapping()
         {
-            CreateMap<User, UserModel>()
+            CreateMap<User, OutputUserModel>()
             .ReverseMap();
 
-            CreateMap<User, UserRegisterModel>()
+            CreateMap<User, InputUserModel>()
             .ReverseMap();
 
-            CreateMap<Wallet, WalletModel>();
+            CreateMap<Wallet, InputWalletModel>();
+
+            CreateMap<Wallet, OutputWalletModel>();
 
             CreateMap<Coin, CoinModel>();
 
-            CreateMap<WalletCoin, WalletCoinModel>()
+            CreateMap<WalletCoin, InputWalletCoinModel>()
                 .ForMember(c => c.CoinName, options => options.MapFrom(m => m.Coin.CoinName))
                 .ForMember(c => c.CoinId, options => options.MapFrom(m => m.Coin.CoinId))
                 .ForMember(c => c.CurrentValue, options => options.MapFrom(m => m.Coin.CurrentValue))
                 .ReverseMap();
-        }
+
+            CreateMap<WalletCoin, OutputWalletCoinModel>()
+                .ForMember(c => c.CoinName, options => options.MapFrom(m => m.Coin.CoinName))
+                .ForMember(c => c.CoinId, options => options.MapFrom(m => m.Coin.CoinId))
+                .ForMember(c => c.CurrentValue, options => options.MapFrom(m => m.Coin.CurrentValue))
+                .ReverseMap();
+            }
     }
 }
