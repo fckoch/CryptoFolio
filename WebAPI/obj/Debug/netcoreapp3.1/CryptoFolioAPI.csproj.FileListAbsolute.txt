@@ -144,8 +144,6 @@ C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\runtimes\
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.AssemblyInfoInputs.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.AssemblyInfo.cs
-C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.csproj.CoreCompileInputs.cache
-C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.RazorTargetAssemblyInfo.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.csproj.CopyComplete
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\staticwebassets\CryptoFolioAPI.StaticWebAssets.Manifest.cache
@@ -154,3 +152,6 @@ C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFol
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.pdb
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.genruntimeconfig.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.csprojAssemblyReference.cache
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.csproj.CoreCompileInputs.cache
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.MvcApplicationPartsAssemblyInfo.cache

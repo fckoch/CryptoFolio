@@ -2,6 +2,7 @@
 using CryptoFolioAPI.Models;
 using CryptoFolioAPI.Models.Entities;
 using CryptoFolioAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("api/wallets/{WalletId}/walletcoins")]
     public class WalletCoinController : ControllerBase
@@ -24,7 +26,7 @@ namespace CryptoFolioAPI.Controllers
         {
             _walletService = walletService;
             _walletCoinService = walletCoinService;
-            _coinService = coinService;
+            _coinService = coinService; 
             _mapper = mapper;
         }
 

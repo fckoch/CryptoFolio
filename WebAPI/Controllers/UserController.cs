@@ -10,9 +10,15 @@ using CryptoFolioAPI.Models.Entities;
 using CryptoFolioAPI.Services;
 using CryptoFolioAPI.Models;
 using AutoMapper;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CryptoFolioAPI.Controllers
 {
+    [AllowAnonymous]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
@@ -28,7 +34,6 @@ namespace CryptoFolioAPI.Controllers
         }
 
         //GET (all users)
-
         [HttpGet]
         public async Task<ActionResult<OutputUserModel[]>> GetAllUsers()
         {
@@ -85,6 +90,26 @@ namespace CryptoFolioAPI.Controllers
             }
 
             return BadRequest();
+        }
+
+        //Authenticate User
+
+        [HttpPost("authenticate")]
+        public IActionResult Authenticate ([FromBody]AuthenticateModel model)
+        {
+            try
+            {
+                var user = _userService.Authenticate(model.UserName, model.Password);
+
+                if (user == null)
+                    return BadRequest("Wrong user or password");
+
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
         }
     }
 }
