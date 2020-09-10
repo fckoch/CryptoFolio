@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CryptoFolioAPI.Models;
 using CryptoFolioAPI.Models.Entities;
+using CryptoFolioAPI.Models.ValueObjects;
 
 namespace CryptoFolioAPI.Data
 {
@@ -16,6 +17,12 @@ namespace CryptoFolioAPI.Data
             .ReverseMap();
 
             CreateMap<User, InputUserModel>()
+            .ReverseMap();
+
+            CreateMap<User, InputAuthenticateModel>()
+            .ReverseMap();
+
+            CreateMap<TokenObject, OutputAuthenticateModel>()
             .ReverseMap();
 
             CreateMap<Wallet, InputWalletModel>();

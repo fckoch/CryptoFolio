@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Models
 {
-    public class AuthenticateModel
+    public class InputAuthenticateModel
     {
         [Required]
         public string UserName { get; set; }
-
         [Required]
         public string Password { get; set; }
     }

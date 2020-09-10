@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoFolioAPI.Data
+namespace CryptoFolioAPI.Models.ValueObjects
 {
-    public class Settings
+    public class TokenObject
     {
-        public string Secret { get; set; }
+        public string Token { get; set; }
     }
 }

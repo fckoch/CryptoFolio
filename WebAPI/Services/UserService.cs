@@ -2,7 +2,9 @@
 using CryptoFolioAPI.Data;
 using CryptoFolioAPI.Models;
 using CryptoFolioAPI.Models.Entities;
+using CryptoFolioAPI.Models.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -18,40 +20,41 @@ namespace CryptoFolioAPI.Services
     {
         private CryptoFolioContext _context;
         private readonly IMapper _mapper;
+        private readonly IOptions<Settings> _settings;
 
-        public UserService(CryptoFolioContext context, IMapper mapper)
+        public UserService(CryptoFolioContext context, IMapper mapper, IOptions<Settings> settings)
         {
             _context = context;
             _mapper = mapper;
+           _settings = settings;
         }
 
-        public User Authenticate(string username, string password)
+        public async Task<TokenObject> AuthenticateAsync(string username, string password)
         {
-            var user = _context.Users.Where(x => x.UserName == username && x.Password == password).FirstOrDefault();
 
-            if (user == null)
+            IQueryable<User> query = _context.Users;
+            query = query.Where(x => x.UserName == username && x.Password == password);
+            if (!await query.AnyAsync())
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            var key = Encoding.ASCII.GetBytes(_settings.Value.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, username),
                     //new Claim("Store", user.Role)
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+            var token = new TokenObject();
+            token.Token = tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
 
-            user.Password = null;
-
-            return user;
-
+            return token;
         }
+
         public async Task<User[]> GetAllUsersAsync()
         {
             IQueryable<User> query = _context.Users;

@@ -19,22 +19,24 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace WebAPI
 {
     public class Startup
     {
+        public IConfiguration _configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public IConfiguration _configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<CryptoFolioContext>(options => options.UseSqlServer(_configuration.GetConnectionString("CryptoFolio")));
             services.AddScoped<UserService>();
             services.AddScoped<WalletService>();
@@ -42,7 +44,10 @@ namespace WebAPI
             services.AddScoped<CoinService>();
             services.AddAutoMapper(typeof(Startup));
 
+            services.Configure<Settings>(_configuration.GetSection("Settings"));
+
             services.AddCors();
+
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()
@@ -52,7 +57,8 @@ namespace WebAPI
             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             // configure jwt authentication
-            var key = Encoding.ASCII.GetBytes(Settings.Secret);
+            var secret = _configuration.GetSection("Settings").Get<Settings>();
+            var key = Encoding.ASCII.GetBytes(secret.Secret);
 
             services.AddAuthorization(options =>
             {

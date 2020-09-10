@@ -153,5 +153,8 @@ C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFol
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.genruntimeconfig.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.csprojAssemblyReference.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.csproj.CoreCompileInputs.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.MvcApplicationPartsAssemblyInfo.cache

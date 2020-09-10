@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace CryptoFolioAPI.Controllers
 {
@@ -77,6 +78,7 @@ namespace CryptoFolioAPI.Controllers
                 // Create new User
                 var user = _mapper.Map<User>(model);
                 user.Wallet = new Wallet();
+                user.Role = "User";
                 _userService.Add(user);
 
                 if (await _userService.SaveChangesAsync())
@@ -95,16 +97,16 @@ namespace CryptoFolioAPI.Controllers
         //Authenticate User
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate ([FromBody]AuthenticateModel model)
+        public async Task<ActionResult<OutputAuthenticateModel>> AuthenticateAsync (InputAuthenticateModel model)
         {
             try
             {
-                var user = _userService.Authenticate(model.UserName, model.Password);
+                var token = await _userService.AuthenticateAsync(model.UserName, model.Password);
 
-                if (user == null)
+                if (token == null)
                     return BadRequest("Wrong user or password");
 
-                return Ok(user);
+                return _mapper.Map<OutputAuthenticateModel>(token);
             }
             catch (Exception ex)
             {
