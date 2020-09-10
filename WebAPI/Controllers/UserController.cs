@@ -57,7 +57,7 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-                var user = await _userService.GetUserAsync(id);
+                var user = await _userService.GetUserByIdAsync(id);
                 if (user == null) return NotFound();
 
                 return _mapper.Map<OutputUserModel>(user);
@@ -79,6 +79,11 @@ namespace CryptoFolioAPI.Controllers
                 var user = _mapper.Map<User>(model);
                 user.Wallet = new Wallet();
                 user.Role = "User";
+                byte[] passwordHash, passwordSalt;
+                UserService.CreatePasswordHash(model.Password, out passwordHash, out passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+
                 _userService.Add(user);
 
                 if (await _userService.SaveChangesAsync())
@@ -101,10 +106,18 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
+                var user = await _userService.GetUserByUsernameAsync(model.UserName);
+
+                if (user == null)
+                    return BadRequest("Wrong user or password");
+
+                if (!UserService.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt))
+                    return BadRequest("Wrong user or password");
+
                 var token = await _userService.AuthenticateAsync(model.UserName, model.Password);
 
                 if (token == null)
-                    return BadRequest("Wrong user or password");
+                    return BadRequest("Authentication error");
 
                 return _mapper.Map<OutputAuthenticateModel>(token);
             }

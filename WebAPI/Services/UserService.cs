@@ -32,10 +32,14 @@ namespace CryptoFolioAPI.Services
         public async Task<TokenObject> AuthenticateAsync(string username, string password)
         {
 
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+                return null;
+
             IQueryable<User> query = _context.Users;
-            query = query.Where(x => x.UserName == username && x.Password == password);
+            query = query.Where(x => x.UserName == username);
             if (!await query.AnyAsync())
                 return null;
+
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.Value.Secret);
@@ -63,10 +67,18 @@ namespace CryptoFolioAPI.Services
             return await query.ToArrayAsync();
         }
 
-        public async Task<User> GetUserAsync(int Id)
+        public async Task<User> GetUserByIdAsync(int Id)
         {
             IQueryable<User> query = _context.Users;
             query = query.Where(c => c.UserId == Id).Include(c => c.Wallet).ThenInclude(c => c.Walletcoins).ThenInclude(c => c.Coin);
+
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<User> GetUserByUsernameAsync(string Username)
+        {
+            IQueryable<User> query = _context.Users;
+            query = query.Where(u => u.UserName == Username);
 
             return await query.FirstOrDefaultAsync();
         }
@@ -85,6 +97,45 @@ namespace CryptoFolioAPI.Services
         public bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserId == id);
+        }
+
+        // Hash methods
+
+        public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            //validation
+
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+
+            //creating hash and salt
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordSalt = hmac.Key;
+            }
+        }
+
+        public static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
+        {
+            //validation
+
+            if (password == null) throw new ArgumentNullException("password");
+            if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
+            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computedHash.Length; i++)
+                {
+                    if (computedHash[i] != storedHash[i]) return false;
+                }
+            }
+
+            return true;
         }
     }
 }
