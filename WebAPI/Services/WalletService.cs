@@ -11,7 +11,7 @@ namespace CryptoFolioAPI.Services
 {
     public class WalletService
     {
-        private readonly CryptoFolioContext _context;
+        private CryptoFolioContext _context;
         private readonly IMapper _mapper;
 
         public WalletService(CryptoFolioContext context, IMapper mapper)

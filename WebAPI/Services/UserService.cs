@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,10 @@ namespace CryptoFolioAPI.Services
         private readonly IMapper _mapper;
         private readonly IOptions<Settings> _settings;
 
+        public const int saltSize = 128; // size in bytes
+        public const int hashSize = 64; // size in bytes
+        public const int iterations = 100000; // number of pbkdf2 iterations
+
         public UserService(CryptoFolioContext context, IMapper mapper, IOptions<Settings> settings)
         {
             _context = context;
@@ -29,18 +34,8 @@ namespace CryptoFolioAPI.Services
            _settings = settings;
         }
 
-        public async Task<TokenObject> AuthenticateAsync(string username, string password)
+        public TokenObject Authenticate(string username, string password, string role)
         {
-
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-                return null;
-
-            IQueryable<User> query = _context.Users;
-            query = query.Where(x => x.UserName == username);
-            if (!await query.AnyAsync())
-                return null;
-
-
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.Value.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -48,7 +43,7 @@ namespace CryptoFolioAPI.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, username),
-                    //new Claim("Store", user.Role)
+                    new Claim(ClaimTypes.Role, role)
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -103,18 +98,22 @@ namespace CryptoFolioAPI.Services
 
         public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
+
             //validation
 
             if (password == null) throw new ArgumentNullException("password");
             if (string.IsNullOrWhiteSpace(password)) throw new ArgumentException("Value cannot be empty or whitespace only string.", "password");
 
-            //creating hash and salt
+            // Generate Salt
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
-            {
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                passwordSalt = hmac.Key;
-            }
+            passwordSalt = new Byte[saltSize]; // Creates new instance   
+            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+            provider.GetBytes(passwordSalt);
+
+            // Generate Hash
+
+            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, passwordSalt, iterations);
+            passwordHash = pbkdf2.GetBytes(hashSize);
         }
 
         public static bool VerifyPasswordHash(string password, byte[] storedHash, byte[] storedSalt)
@@ -126,7 +125,18 @@ namespace CryptoFolioAPI.Services
             if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
             if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
 
-            using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
+            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, storedSalt, iterations);
+            var passwordHash = pbkdf2.GetBytes(hashSize);
+
+            for (int i = 0; i < passwordHash.Length; i++)
+            {
+                if (passwordHash[i] != storedHash[i])
+                    return false;
+            }
+
+            return true;
+
+            /*using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++)
@@ -135,7 +145,7 @@ namespace CryptoFolioAPI.Services
                 }
             }
 
-            return true;
+            return true;*/
         }
     }
 }
