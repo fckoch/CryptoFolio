@@ -41,13 +41,45 @@ namespace CryptoFolioAPI.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
             }
         }
+
+        //Get coin by ID
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CoinModel>> Get (int id)
         {
             try
             {
                 var coin = await _coinService.GetCoinAsync(id);
+                if (coin == null)
+                    return NotFound("Coin not found");
                 return _mapper.Map<CoinModel>(coin);
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+        }
+
+        //Update coin value
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<CoinModel>> Put(int id, CoinModel model)
+        {
+            try
+            {
+                var coin = await _coinService.GetCoinAsync(id);
+                if (coin == null)
+                    return NotFound("Coin not found");
+
+                _mapper.Map(model, coin);
+
+                if (await _coinService.SaveChangesAsync())
+                {
+                    return _mapper.Map<CoinModel>(coin);
+                }
+                else
+                {
+                    return BadRequest("Failed to update coin value");
+                }
             }
             catch (Exception ex)
             {

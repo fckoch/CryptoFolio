@@ -98,7 +98,6 @@ namespace CryptoFolioAPI.Services
 
         public static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-
             //validation
 
             if (password == null) throw new ArgumentNullException("password");
@@ -136,16 +135,6 @@ namespace CryptoFolioAPI.Services
 
             return true;
 
-            /*using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != storedHash[i]) return false;
-                }
-            }
-
-            return true;*/
         }
     }
 }

@@ -29,7 +29,8 @@ namespace CryptoFolioAPI.Data
 
             CreateMap<Wallet, OutputWalletModel>();
 
-            CreateMap<Coin, CoinModel>();
+            CreateMap<Coin, CoinModel>()
+            .ReverseMap();
 
             CreateMap<WalletCoin, InputWalletCoinModel>()
                 .ForMember(c => c.CoinName, options => options.MapFrom(m => m.Coin.CoinName))
