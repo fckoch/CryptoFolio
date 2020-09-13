@@ -158,3 +158,5 @@ C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Microsoft
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.csproj.CoreCompileInputs.cache
 C:\Users\filip\source\repos\CryptoFolio\WebAPI\obj\Debug\netcoreapp3.1\CryptoFolioAPI.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.json
+C:\Users\filip\source\repos\CryptoFolio\WebAPI\bin\Debug\netcoreapp3.1\Properties\serviceDependencies.local.json

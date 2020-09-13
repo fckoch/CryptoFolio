@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4NyIaBr3C0MBbuFggRJ9KWQ27D+neOZPmUOP021lO8c8Nh/zFr/AAJXwgua3jEpCDDgY65fZ9iKzIFJZIHKFNw==",
+  "dgSpecHash": "1hSImvFxQKzos0ACZDjyTa/0lgwzx48XXjm7BX8NLyPcfErg4lwVzb2e2kYAW2i9UndSAAkVErhspWxw+i+Pgw==",
   "success": true,
   "projectFilePath": "C:\\Users\\filip\\source\\repos\\CryptoFolio\\CryptoFolioWorkerService\\CryptoFolioWorkerService.csproj",
   "expectedPackageFiles": [
@@ -33,6 +33,7 @@
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\3.1.6\\microsoft.extensions.filesystemglobbing.3.1.6.nupkg.sha512",
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.extensions.hosting\\3.1.6\\microsoft.extensions.hosting.3.1.6.nupkg.sha512",
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\3.1.6\\microsoft.extensions.hosting.abstractions.3.1.6.nupkg.sha512",
+    "C:\\Users\\filip\\.nuget\\packages\\microsoft.extensions.http\\3.1.8\\microsoft.extensions.http.3.1.8.nupkg.sha512",
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.extensions.logging\\3.1.8\\microsoft.extensions.logging.3.1.8.nupkg.sha512",
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\3.1.8\\microsoft.extensions.logging.abstractions.3.1.8.nupkg.sha512",
     "C:\\Users\\filip\\.nuget\\packages\\microsoft.extensions.logging.configuration\\3.1.6\\microsoft.extensions.logging.configuration.3.1.6.nupkg.sha512",

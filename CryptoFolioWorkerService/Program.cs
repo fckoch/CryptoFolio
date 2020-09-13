@@ -30,10 +30,9 @@ namespace CryptoFolioWorkerService
                     //if (string.IsNullOrWhiteSpace(cryptoQuoteApiKey))
                     //    throw new InvalidOperationException("Can not start the service without a valid CryptoQuoteApiKey API key!");
 
-                    var optionsBuilder = new DbContextOptionsBuilder<CryptoFolioContext>();
-                    optionsBuilder.UseSqlServer("Server=.;Database=CryptoFolioData;user id=fckoch;password=951248;Trusted_Connection=True;integrated security=False;multipleactiveresultsets=True;");
-                    services.AddScoped<CryptoFolioContext>(s => new CryptoFolioContext(optionsBuilder.Options));
+                    services.AddDbContext<CryptoFolioContext>(options => options.UseSqlServer(hostContext.Configuration.GetConnectionString("CryptoFolio")));
                     services.AddHostedService<Worker>();
+                    services.AddHttpClient();
                 });
 
             return host;

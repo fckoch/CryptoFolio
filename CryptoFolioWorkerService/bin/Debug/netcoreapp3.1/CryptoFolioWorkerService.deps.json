@@ -13,6 +13,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.8",
           "Microsoft.EntityFrameworkCore.Tools": "3.1.8",
           "Microsoft.Extensions.Hosting": "3.1.6",
+          "Microsoft.Extensions.Http": "3.1.8",
           "NATS.Client": "0.10.1",
           "System.Net.Http.Json": "3.2.1"
         },
@@ -349,6 +350,19 @@
           "lib/netcoreapp3.1/Microsoft.Extensions.Hosting.Abstractions.dll": {
             "assemblyVersion": "3.1.6.0",
             "fileVersion": "3.100.620.31605"
+          }
+        }
+      },
+      "Microsoft.Extensions.Http/3.1.8": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "3.1.8",
+          "Microsoft.Extensions.Logging": "3.1.8",
+          "Microsoft.Extensions.Options": "3.1.8"
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Microsoft.Extensions.Http.dll": {
+            "assemblyVersion": "3.1.8.0",
+            "fileVersion": "3.100.820.42004"
           }
         }
       },
@@ -1899,6 +1913,13 @@
       "sha512": "sha512-CtXVuuBcKQXmNQm6a/wGwKkYxLNsIp7TrL8+XPld6aFUisOkkBHTm3EIm8vwKlHRI8xLONgfgILXPXREGaBBwQ==",
       "path": "microsoft.extensions.hosting.abstractions/3.1.6",
       "hashPath": "microsoft.extensions.hosting.abstractions.3.1.6.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Http/3.1.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GRkzBs2wJG6jTGqRrT8l/Sqk4MiO0yQltiekDNw/X7L2l5/gKSud/6Vcjb9b5SPtgn6lxcn8qCmfDtk2kP/cOw==",
+      "path": "microsoft.extensions.http/3.1.8",
+      "hashPath": "microsoft.extensions.http.3.1.8.nupkg.sha512"
     },
     "Microsoft.Extensions.Logging/3.1.8": {
       "type": "package",

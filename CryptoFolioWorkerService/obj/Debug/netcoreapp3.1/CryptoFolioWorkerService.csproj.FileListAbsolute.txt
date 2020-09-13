@@ -77,4 +77,5 @@ C:\Users\filip\source\repos\CryptoFolio\CryptoFolioWorkerService\bin\Debug\netco
 C:\Users\filip\source\repos\CryptoFolio\CryptoFolioWorkerService\bin\Debug\netcoreapp3.1\Newtonsoft.Json.Bson.dll
 C:\Users\filip\source\repos\CryptoFolio\CryptoFolioWorkerService\bin\Debug\netcoreapp3.1\System.Net.Http.Json.dll
 C:\Users\filip\source\repos\CryptoFolio\CryptoFolioWorkerService\bin\Debug\netcoreapp3.1\System.Text.Json.dll
+C:\Users\filip\source\repos\CryptoFolio\CryptoFolioWorkerService\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Http.dll
 C:\Users\filip\source\repos\CryptoFolio\CryptoFolioWorkerService\obj\Debug\netcoreapp3.1\CryptoFolioWorkerService.csproj.CoreCompileInputs.cache
