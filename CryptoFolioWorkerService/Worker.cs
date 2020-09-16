@@ -47,16 +47,17 @@ namespace CryptoFolioWorkerService
                     cryptoQuoteCoinList = JsonConvert.DeserializeObject<CoinData[]>(resp).ToList();
                 }
 
-                //IQueryable<Coin> query = dbContext.Coin;
-                int newCoinCount = 0;
-                int updateCoinCount = 0;
+                int addCount = 0;
+                int updateCount = 0;
 
                 foreach (var coin in cryptoQuoteCoinList)
                 {
-                    //Checks if coin from current loop already exists in DB
-                    if (int.Parse(coin.rank) > 1000)
+
+                    //Will only loop until specified rank
+                    if (int.Parse(coin.rank) > 1320)
                         break;
 
+                    //Checks if coin from current loop already exists in DB
                     var dbCoin = dbContext.Coin.Where(c => c.CoinName == coin.name).FirstOrDefault();
 
                     try
@@ -71,13 +72,20 @@ namespace CryptoFolioWorkerService
                                 dbCoin.Price_change_pct = Decimal.Parse(coin.oneD.price_change_pct);
                             }
                             dbCoin.Rank = int.Parse(coin.rank);
-                            if (await dbContext.SaveChangesAsync() > 0)
-                                updateCoinCount++;
-                                Console.WriteLine($"Coin {coin.name} updated. UpdateCoinCount: {updateCoinCount}");
+                            updateCount++;
+
+                            //Save changes to db each 100 new coins updated
+                            if (updateCount == 100)
+                            {
+                                if (await dbContext.SaveChangesAsync() > 0)
+                                    Console.WriteLine($"{updateCount} coins were updated");
+                                    updateCount = 0;
+                            }
+
                         }
                         else
                         {
-                            //If coin from loops doesnt exist, add new coin to DB.
+                            //If coin from loop doesnt exist, add new coin to DB.
                             Coin newCoin = new Coin();
                             newCoin.CoinName = coin.name;
                             if (coin.oneD != null)
@@ -89,9 +97,16 @@ namespace CryptoFolioWorkerService
                             newCoin.Rank = int.Parse(coin.rank);
                             newCoin.Symbol = coin.symbol;
                             dbContext.Coin.Add(newCoin);
-                            if (await dbContext.SaveChangesAsync() > 0)
-                                newCoinCount++;
-                                Console.WriteLine($"Coin {coin.name} updated. UpdateCoinCount: {newCoinCount}");
+                            addCount++;
+
+                            //Save changes to db each 100 new coins added
+                            if (addCount == 100)
+                            {
+                                if (await dbContext.SaveChangesAsync() > 0)
+                                    Console.WriteLine($"{addCount} coins were added");
+                                    addCount = 0;
+                            }
+
                         }
 
                     }
@@ -102,10 +117,13 @@ namespace CryptoFolioWorkerService
                         //throw;
                         _logger.LogInformation($"Exception error - {ex.ToString()}");
                     }
- 
+
                 }
 
-                _logger.LogInformation($"{newCoinCount} new coins were added to DB and {updateCoinCount} were updated");
+                //Save changes to db for remaining coins
+                if (await dbContext.SaveChangesAsync() > 0)
+                    Console.WriteLine($"{addCount} coins were added");
+                    Console.WriteLine($"{updateCount} coins were updated");
 
                 await Task.Delay(10000, stoppingToken);
 
