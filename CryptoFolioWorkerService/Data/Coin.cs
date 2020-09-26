@@ -13,10 +13,13 @@ namespace CryptoFolioWorkerService
         [Column(TypeName = "decimal(18,4)")]
         public decimal CurrentValue { get; set; }
         public string Symbol { get; set; }
-        public int Rank { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal Price_change { get; set; }
+        public decimal PriceChange { get; set; }
         [Column(TypeName = "decimal(18,4)")]
-        public decimal Price_change_pct { get; set; }
+        public decimal PriceChangePct { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal MarketCap { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal AllTimeHigh { get; set; }
     }
 }

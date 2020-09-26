@@ -44,7 +44,7 @@ namespace CryptoFolioWorkerService
                 if (httpResponseMessage.IsSuccessStatusCode)
                 {
                     var resp = await httpResponseMessage.Content.ReadAsStringAsync();
-                    cryptoQuoteCoinList = JsonConvert.DeserializeObject<CoinData[]>(resp).ToList();
+                    cryptoQuoteCoinList = JsonConvert.DeserializeObject<CoinData[]>(resp).OrderByDescending(c => c.market_cap).ToList();
                 }
 
                 int addCount = 0;
@@ -52,10 +52,6 @@ namespace CryptoFolioWorkerService
 
                 foreach (var coin in cryptoQuoteCoinList)
                 {
-
-                    //Will only loop until specified rank
-                    if (int.Parse(coin.rank) > 1320)
-                        break;
 
                     //Checks if coin from current loop already exists in DB
                     var dbCoin = dbContext.Coin.Where(c => c.CoinName == coin.name).FirstOrDefault();
@@ -68,10 +64,13 @@ namespace CryptoFolioWorkerService
                             dbCoin.CurrentValue = Decimal.Parse(coin.price);
                             if (coin.oneD != null)
                             {
-                                dbCoin.Price_change = Decimal.Parse(coin.oneD.price_change);
-                                dbCoin.Price_change_pct = Decimal.Parse(coin.oneD.price_change_pct);
+                                dbCoin.PriceChange = Decimal.Parse(coin.oneD.price_change);
+                                dbCoin.PriceChangePct = Decimal.Parse(coin.oneD.price_change_pct);
                             }
-                            dbCoin.Rank = int.Parse(coin.rank);
+                            dbCoin.AllTimeHigh = Decimal.Parse(coin.high);
+                            if (coin.market_cap == null)
+                                continue;
+                            dbCoin.MarketCap = Decimal.Parse(coin.market_cap);
                             updateCount++;
 
                             //Save changes to db each 100 new coins updated
@@ -88,13 +87,16 @@ namespace CryptoFolioWorkerService
                             //If coin from loop doesnt exist, add new coin to DB.
                             Coin newCoin = new Coin();
                             newCoin.CoinName = coin.name;
+                            newCoin.CurrentValue = Decimal.Parse(coin.price);
                             if (coin.oneD != null)
                             {
-                                newCoin.CurrentValue = Decimal.Parse(coin.price);
-                                newCoin.Price_change = Decimal.Parse(coin.oneD.price_change);
-                                newCoin.Price_change_pct = Decimal.Parse(coin.oneD.price_change_pct);
+                                newCoin.PriceChange = Decimal.Parse(coin.oneD.price_change);
+                                newCoin.PriceChangePct = Decimal.Parse(coin.oneD.price_change_pct);
                             }
-                            newCoin.Rank = int.Parse(coin.rank);
+                            newCoin.AllTimeHigh = Decimal.Parse(coin.high);
+                            if (coin.market_cap == null)
+                                continue;
+                            newCoin.MarketCap = Decimal.Parse(coin.market_cap);
                             newCoin.Symbol = coin.symbol;
                             dbContext.Coin.Add(newCoin);
                             addCount++;

@@ -5,9 +5,11 @@ using CryptoFolioAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Controllers
@@ -26,7 +28,52 @@ namespace CryptoFolioAPI.Controllers
             _mapper = mapper;
         }
 
-        //Get all coins
+        //Get coins by query
+        [HttpGet]
+        public async Task<ActionResult<CoinModel[]>> GetCoins([FromQuery] CoinParameters coinParameters)
+        {
+            try
+            {
+                var coins = await _coinService.GetCoinsByQuery(coinParameters);
+
+                var metadata = new
+                {
+                    coins.TotalCount,
+                    coins.PageSize,
+                    coins.CurrentPage,
+                    coins.TotalPages,
+                    coins.HasNext,
+                    coins.HasPrevious
+                };  
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return _mapper.Map<CoinModel[]>(coins);
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+        }
+
+        /*//Get coins by query
+        [HttpGet]
+        public async Task<ActionResult<CoinModel[]>> GetCoins([FromQuery] CoinParameters coinParameters)
+        {
+            try
+            {
+                var coins = await _coinService.GetCoinsByQuery(coinParameters);
+                return _mapper.Map<CoinModel[]>(coins);
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+        }*/
+
+        /*//Get all coins
         [HttpGet]
         public async Task<ActionResult<CoinModel[]>> Get()
         {
@@ -40,7 +87,7 @@ namespace CryptoFolioAPI.Controllers
 
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
             }
-        }
+        }*/
 
         //Get coin by ID
         [HttpGet("{id:int}")]

@@ -10,7 +10,8 @@ namespace CryptoFolioWorkerService.Data
         public string symbol { get; set; }
         public string name { get; set; }
         public string price { get; set; }
-        public string rank { get; set; }
+        public string market_cap { get; set; }
+        public string high { get; set; }
         [JsonProperty("1d")]
         public oned oneD { get; set; }
     }

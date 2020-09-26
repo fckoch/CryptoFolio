@@ -1,0 +1,49 @@
+.coin-table {
+    border-collapse: collapse;
+    margin: 80px 5px 10px;
+    width: 60%;
+    margin-left:auto;
+    margin-right:auto;
+    font-size: 0.9em;
+    background: white;
+}
+
+.coin-table th,
+.coin-table td {
+    padding: 15px 17px;
+}
+
+.coin-table tbody tr:hover {
+    background-color: #ececec
+}
+.th-center {
+    text-align: center;
+}
+
+.th-left,
+.td-left {
+    text-align: left;
+}
+
+.red-pct-change,
+.green-pct-change,
+.th-right,
+.td-right {
+    text-align: right;
+}
+
+.coin-table tbody td {
+    border-bottom: 1px solid #dddddd;
+}
+
+.green-pct-change {
+    color: green;
+}
+
+.red-pct-change {
+    color: red;
+}
+
+.coin-icon-img {
+    width: 30px;
+}

@@ -26,20 +26,23 @@ namespace CryptoFolioAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<decimal>("AllTimeHigh")
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<string>("CoinName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("CurrentValue")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<decimal>("Price_change")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("MarketCap")
+                        .HasColumnType("decimal(18,4)");
 
-                    b.Property<decimal>("Price_change_pct")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<decimal>("PriceChange")
+                        .HasColumnType("decimal(18,4)");
 
-                    b.Property<int>("Rank")
-                        .HasColumnType("int");
+                    b.Property<decimal>("PriceChangePct")
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("Symbol")
                         .HasColumnType("nvarchar(max)");

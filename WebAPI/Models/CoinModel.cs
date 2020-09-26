@@ -12,5 +12,15 @@ namespace CryptoFolioAPI.Models
         public string CoinName { get; set; }
         [Column(TypeName = "decimal(18,4)")]
         public decimal CurrentValue { get; set; }
+        public string Symbol { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal PriceChange { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal PriceChangePct { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal MarketCap { get; set; }
+        [Column(TypeName = "decimal(18,4)")]
+        public decimal AllTimeHigh { get; set; }
+
     }
 }

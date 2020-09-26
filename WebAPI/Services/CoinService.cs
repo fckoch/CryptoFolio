@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CryptoFolioAPI.Data;
+using CryptoFolioAPI.Helpers;
 using CryptoFolioAPI.Models;
 using CryptoFolioAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -21,10 +22,12 @@ namespace CryptoFolioAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<Coin[]> GetAllCoinsAsync()
+        public async Task <PagedList<Coin>> GetCoinsByQuery (CoinParameters coinParameters)
         {
             IQueryable<Coin> query = _context.Coin;
-            return await query.ToArrayAsync();
+            query = query.OrderByDescending(c => c.MarketCap);
+
+            return await PagedList<Coin>.ToPagedListAsync(query, coinParameters.PageNumber, coinParameters.PageSize);
         }
 
         public async Task<Coin> GetCoinAsync(int Id)
