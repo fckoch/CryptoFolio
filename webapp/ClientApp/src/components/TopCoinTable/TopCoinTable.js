@@ -3,20 +3,20 @@ import './TopCoinTable.css';
 
 class TopCoinTable extends Component {
     constructor(props) {
-        super(props);
+        super();
         this.state = {
             totalReactPackages: null,
             errorMessage: null,
-            data: []
+            coins: []
         }
     }
 
     componentDidMount() {
-        fetch('https://localhost:5001/api/coins')
+        fetch('https://localhost:5001/api/coins?pageNumber=1&pageSize=10')
             .then(async response => {
                 const data = await response.json();
-                this.setState({data: data});
-                
+                this.setState({coins: [...data.coins]});
+                console.log(data);
             if (!response.ok) {
                 const error = (data && data.message) || response.statusText;
                 return Promise.reject(error);
@@ -30,9 +30,9 @@ class TopCoinTable extends Component {
             });
     }
 
-    renderCoinTable() {
-        return this.state.data.map((coin, index) => {
-            const { rank, coinName, symbol, currentValue, priceChangePct, marketCap } = coin 
+    renderTopCoinTable() {
+        return this.state.coins.map((coin, index) => {
+            const { coinName, symbol, currentValue, priceChangePct, marketCap } = coin 
             return (
                 <tr>
                     <td className="td-left">{ index + 1}</td>
@@ -69,7 +69,7 @@ class TopCoinTable extends Component {
                     </tr>  
                 </thead>
                 <tbody>
-                    {this.renderCoinTable()}
+                    {this.renderTopCoinTable()}
                 </tbody>
             </table>
         )

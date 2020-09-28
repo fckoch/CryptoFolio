@@ -28,27 +28,26 @@ namespace CryptoFolioAPI.Controllers
             _mapper = mapper;
         }
 
-        //Get coins by query
+        //Get coins by pagination query
         [HttpGet]
-        public async Task<ActionResult<CoinModel[]>> GetCoins([FromQuery] CoinParameters coinParameters)
+        public async Task<ActionResult<PaginationQueryModel>> GetCoins([FromQuery] CoinParameters coinParameters)
         {
             try
             {
                 var coins = await _coinService.GetCoinsByQuery(coinParameters);
+                var coinResults = _mapper.Map<CoinModel[]>(coins);
 
-                var metadata = new
-                {
-                    coins.TotalCount,
-                    coins.PageSize,
-                    coins.CurrentPage,
-                    coins.TotalPages,
-                    coins.HasNext,
-                    coins.HasPrevious
-                };  
+                PaginationQueryModel results = new PaginationQueryModel();
 
-                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+                results.coins = coinResults;
+                results.TotalCount = coins.TotalCount;
+                results.PageSize = coins.PageSize;
+                results.CurrentPage = coins.CurrentPage;
+                results.TotalPages = coins.TotalPages;
+                results.HasNext = coins.HasNext;
+                results.HasPrevious = coins.HasPrevious;
 
-                return _mapper.Map<CoinModel[]>(coins);
+                return results;
             }
             catch (Exception ex)
             {
@@ -56,38 +55,6 @@ namespace CryptoFolioAPI.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
             }
         }
-
-        /*//Get coins by query
-        [HttpGet]
-        public async Task<ActionResult<CoinModel[]>> GetCoins([FromQuery] CoinParameters coinParameters)
-        {
-            try
-            {
-                var coins = await _coinService.GetCoinsByQuery(coinParameters);
-                return _mapper.Map<CoinModel[]>(coins);
-            }
-            catch (Exception ex)
-            {
-
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
-            }
-        }*/
-
-        /*//Get all coins
-        [HttpGet]
-        public async Task<ActionResult<CoinModel[]>> Get()
-        {
-            try
-            {
-                var coins = await _coinService.GetAllCoinsAsync();
-                return _mapper.Map<CoinModel[]>(coins);
-            }
-            catch (Exception ex)
-            {
-
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
-            }
-        }*/
 
         //Get coin by ID
         [HttpGet("{id:int}")]

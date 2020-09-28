@@ -1,0 +1,132 @@
+a {
+    text-decoration: none; }
+
+.pagination {
+    text-align: center;
+    margin: 0px 0px 15px;
+}
+
+.waves-effect {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    vertical-align: middle;
+    z-index: 1;
+    will-change: opacity, transform;
+    transition: .3s ease-out;
+    text-decoration: none }
+    .waves-effect .waves-ripple {
+      position: absolute;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      margin-top: -10px;
+      margin-left: -10px;
+      opacity: 0;
+      background: rgba(0, 0, 0, 0.2);
+      transition: all 0.7s ease-out;
+      transition-property: transform, opacity;
+      transform: scale(0);
+      pointer-events: none; }
+    .waves-effect.waves-light .waves-ripple {
+      background-color: rgba(255, 255, 255, 0.45); }
+    .waves-effect.waves-red .waves-ripple {
+      background-color: rgba(244, 67, 54, 0.7); }
+    .waves-effect.waves-yellow .waves-ripple {
+      background-color: rgba(255, 235, 59, 0.7); }
+    .waves-effect.waves-orange .waves-ripple {
+      background-color: rgba(255, 152, 0, 0.7); }
+    .waves-effect.waves-purple .waves-ripple {
+      background-color: rgba(156, 39, 176, 0.7); }
+    .waves-effect.waves-green .waves-ripple {
+      background-color: rgba(76, 175, 80, 0.7); }
+    .waves-effect.waves-teal .waves-ripple {
+      background-color: rgba(0, 150, 136, 0.7); }
+    .waves-effect input[type="button"], .waves-effect input[type="reset"], .waves-effect input[type="submit"] {
+      border: 0;
+      font-style: normal;
+      font-size: inherit;
+      text-transform: inherit;
+      background: none; }
+    .waves-effect img {
+      position: relative;
+      z-index: -1; }
+
+.pagination li {
+  display: inline-block;
+  border-radius: 2px;
+  text-align: center;
+  vertical-align: top;
+  height: 30px; }
+  .pagination li a {
+    color: #444;
+    display: inline-block;
+    font-size: 1.2rem;
+    padding: 0 10px;
+    line-height: 30px; }
+  .pagination li.active a {
+    color: #fff; }
+  .pagination li.active {
+    background-color: #6e9bee; }
+  .pagination li.disabled a {
+    cursor: default;
+    color: #999; }
+  .pagination li i {
+    font-size: 2rem; }
+
+.pagination li.pages ul li {
+  display: inline-block;
+  float: none; }
+
+@media only screen and (max-width: 992px) {
+  .pagination {
+    width: 100%; }
+    .pagination li.prev,
+    .pagination li.next {
+      width: 10%; }
+    .pagination li.pages {
+      width: 80%;
+      overflow: hidden;
+      white-space: nowrap; } }
+      .pagination li {
+        display: inline-block;
+        border-radius: 2px;
+        text-align: center;
+        vertical-align: top;
+        height: 30px; }
+        .pagination li a {
+          color: #444;
+          display: inline-block;
+          font-size: 1.2rem;
+          padding: 0 10px;
+          line-height: 30px; }
+        .pagination li.active a {
+          color: #fff; }
+        .pagination li.active {
+          background-color: #6e9bee; }
+        .pagination li.disabled a {
+          cursor: default;
+          color: #999; }
+        .pagination li i {
+          font-size: 2rem; }
+      
+      .pagination li.pages ul li {
+        display: inline-block;
+        float: none; }
+      
+      @media only screen and (max-width: 992px) {
+        .pagination {
+          width: 100%; }
+          .pagination li.prev,
+          .pagination li.next {
+            width: 10%; }
+          .pagination li.pages {
+            width: 80%;
+            overflow: hidden;
+            white-space: nowrap; } }

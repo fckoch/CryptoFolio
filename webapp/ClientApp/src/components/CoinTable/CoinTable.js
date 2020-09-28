@@ -1,22 +1,27 @@
 import React, { Component } from 'react';
 import './CoinTable.css';
+import Pagination from "../Pagination/Pagination.js";
 
 class CoinTable extends Component {
     constructor(props) {
-        super(props);
+        super()
         this.state = {
             totalReactPackages: null,
             errorMessage: null,
-            coins: []
+            coins: [],
+            totalResults: 0,
+            currentPage: 0,
+            totalPages: 0,
+            pageSize: 0
         }
     }
 
     componentDidMount() {
-        fetch('https://localhost:5001/api/coins?pageNumber=1&pageSize=50')
+        fetch('https://localhost:5001/api/coins?pageNumber=1&pageSize=100')
             .then(async response => {
                 const data = await response.json();
-                this.setState({coins: data});
-                
+                this.setState({coins: [...data.coins], pageSize: data.pageSize, currentPage: data.currentPage, totalPages: data.totalPages});
+                console.log(this.state.totalPages);
             if (!response.ok) {
                 const error = (data && data.message) || response.statusText;
                 return Promise.reject(error);
@@ -28,6 +33,25 @@ class CoinTable extends Component {
                 this.setState({ errorMessage: error.toString() });
                 console.error('There was an error!', error);
             });
+    }
+
+
+    nextPage = (pageNumber) => {
+            fetch(`https://localhost:5001/api/coins?pageNumber=${pageNumber}&pageSize=100`)
+                .then(async response => {
+                    const data = await response.json();
+                    this.setState({coins: [...data.coins], currentPage: pageNumber})
+            if (!response.ok) {
+                const error = (data && data.message) || response.statusText;
+                    return Promise.reject(error);
+                }
+        
+                this.setState({ totalReactPackages: data.total })
+                })
+                .catch(error => {
+                    this.setState({ errorMessage: error.toString() });
+                    console.error('There was an error!', error);
+                });
     }
 
     renderCoinTableHeader() {
@@ -48,7 +72,7 @@ class CoinTable extends Component {
             const { coinName, symbol, currentValue, priceChangePct, marketCap } = coin 
             return (
                 <tr>
-                    <td className="td-left">{ index + 1}</td>
+                    <td className="td-left">{ this.state.currentPage * this.state.pageSize + index + 1 - 100 }</td>
                     <td className="td-left">{ symbol }</td>
                     <td className="td-left">{ coinName }</td>
                     <td className="td-right">{ Intl.NumberFormat(
@@ -66,17 +90,20 @@ class CoinTable extends Component {
             )
         })
     }
-''
+
     render () {
         return (
-            <table class="coin-table">
-                <thead>
-                    {this.renderCoinTableHeader()}
-                </thead>
-                <tbody>
-                    {this.renderCoinTableBody()}
-                </tbody>
-            </table>
+            <div>
+                <table className="coin-table">
+                    <thead>
+                        {this.renderCoinTableHeader()}
+                    </thead>
+                    <tbody>
+                        {this.renderCoinTableBody()}
+                    </tbody>
+                </table>
+                <Pagination currentPage={this.state.currentPage} totalPages={this.state.totalPages} nextPage={this.nextPage}/>
+            </div>
         )
     }
 }
