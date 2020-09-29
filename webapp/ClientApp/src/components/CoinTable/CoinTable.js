@@ -93,7 +93,7 @@ class CoinTable extends Component {
 
     render () {
         return (
-            <div>
+            <div className="container">
                 <table className="coin-table">
                     <thead>
                         {this.renderCoinTableHeader()}

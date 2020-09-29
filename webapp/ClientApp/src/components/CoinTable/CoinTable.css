@@ -1,11 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+html::-webkit-scrollbar {
+    display: none;
+ }
+
 .coin-table {
     border-collapse: collapse;
     margin: 80px 5px 15px;
     width: 60%;
     margin-left:auto;
     margin-right:auto;
-    font-size: 0.9em;
     background: white;
+    font-family: 'Montserrat', sans-serif;
+    position: relative;
+}
+
+.coin-table::-webkit-scrollbar {
+    display:none;
+}
+
+.container::-webkit-scrollbar {
+    display:none;
 }
 
 .coin-table th,
@@ -46,4 +61,9 @@
 
 .coin-icon-img {
     width: 30px;
+}
+
+td {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
 }

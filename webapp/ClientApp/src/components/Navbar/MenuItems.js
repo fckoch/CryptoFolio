@@ -11,12 +11,12 @@
     },
     {
         title: 'Login',
-        url: '#',
+        url: '/login',
         cName: 'nav-links'
     },
     {
         title: 'Sign up',
-        url: '#',
+        url: '/register',
         cName: 'nav-links'
     }
 ]

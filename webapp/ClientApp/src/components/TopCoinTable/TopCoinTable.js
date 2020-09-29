@@ -30,6 +30,19 @@ class TopCoinTable extends Component {
             });
     }
 
+    renderTopCoinTableHeader() {
+        return (
+            <tr>
+                <th className="th-left">Rank</th>
+                <th colspan="2" className="th-center">Symbol</th>
+                <th className="th-left">Cryptocurrency</th>
+                <th className="th-right">Market Cap</th>
+                <th className="th-right">Price</th>
+                <th className="th-right">24h change</th>
+            </tr>  
+        )
+    }
+
     renderTopCoinTable() {
         return this.state.coins.map((coin, index) => {
             const { coinName, symbol, currentValue, priceChangePct, marketCap } = coin 
@@ -57,21 +70,16 @@ class TopCoinTable extends Component {
 
     render () {
         return (
-            <table class="coin-table">
-                <thead>
-                    <tr>
-                        <th className="th-left">Rank</th>
-                        <th colspan="2" className="th-center">Symbol</th>
-                        <th className="th-left">Cryptocurrency</th>
-                        <th className="th-right">Market Cap</th>
-                        <th className="th-right">Price</th>
-                        <th className="th-right">24h change</th>
-                    </tr>  
-                </thead>
-                <tbody>
-                    {this.renderTopCoinTable()}
-                </tbody>
-            </table>
+            <div>
+                <table class="coin-table">
+                    <thead>
+                        {this.renderTopCoinTableHeader()}
+                    </thead>
+                    <tbody>
+                        {this.renderTopCoinTable()}
+                    </tbody>
+                </table>
+            </div>
         )
     }
 }

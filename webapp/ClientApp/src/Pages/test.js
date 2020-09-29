@@ -1,14 +1,13 @@
 import React from 'react';
-import TopCoinTable from "../components/TopCoinTable/TopCoinTable.js";
+import CoinTable from "../components/CoinTable/CoinTable.js";
 import ViewMoreButton from "../components/ViewMoreButton/ViewMoreButton.js";
 
-const Home = () => {
+const test = () => {
     return (
         <div>
-            <TopCoinTable/>
             <ViewMoreButton/>
         </div>
     );
 }
 
-export default Home;
+export default test;

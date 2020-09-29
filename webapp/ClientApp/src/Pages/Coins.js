@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import CoinTable from "../components/CoinTable/CoinTable.js";
 
 const Coins = () => {
