@@ -3,7 +3,6 @@ import './App.css';
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import Home from "./Pages/Home.js";
 import Coins from "./Pages/Coins.js";
-import test from "./Pages/test.js";
 import Login from "./Pages/Login.js";
 import Register from "./Pages/Register.js";
 import Navbar from "./components/Navbar/Navbar.js";

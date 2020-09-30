@@ -106,12 +106,12 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-                var user = await _userService.GetUserByUsernameAsync(model.UserName);
+                var user = await _userService.GetUserByEmailAsync(model.Email);
 
                 if (user == null || (!UserService.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt)))
                     return BadRequest("Wrong user or password");
                 
-                var token = _userService.Authenticate(model.UserName, model.Password, user.Role);
+                var token = _userService.Authenticate(model.Email, model.Password, user.Role);
 
                 if (token == null)
                     return BadRequest("Authentication error");

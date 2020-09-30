@@ -21,7 +21,6 @@ class CoinTable extends Component {
             .then(async response => {
                 const data = await response.json();
                 this.setState({coins: [...data.coins], pageSize: data.pageSize, currentPage: data.currentPage, totalPages: data.totalPages});
-                console.log(this.state.totalPages);
             if (!response.ok) {
                 const error = (data && data.message) || response.statusText;
                 return Promise.reject(error);

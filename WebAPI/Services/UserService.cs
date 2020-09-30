@@ -70,10 +70,10 @@ namespace CryptoFolioAPI.Services
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<User> GetUserByUsernameAsync(string Username)
+        public async Task<User> GetUserByEmailAsync(string Email)
         {
             IQueryable<User> query = _context.Users;
-            query = query.Where(u => u.UserName == Username);
+            query = query.Where(u => u.Email == Email);
 
             return await query.FirstOrDefaultAsync();
         }
