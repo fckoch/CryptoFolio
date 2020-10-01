@@ -1,6 +1,8 @@
 import axios from "axios";
+import https from 'https';
 
 const API_URL = "http://localhost:5001/api/users";
+const httpsAgent = new https.Agent({ rejectUnauthorized: false });
 
 class AuthService {
     register(firstname, lastname, email, password) {
@@ -9,8 +11,8 @@ class AuthService {
             lastname,
             email,
             password
-        });
+        }, httpsAgent);
     }
 }
 
-export default AuthService;
+export default new AuthService;
