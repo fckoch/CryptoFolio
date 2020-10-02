@@ -75,25 +75,38 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-                // Create new User
                 var user = _mapper.Map<User>(model);
-                user.Wallet = new Wallet();
-                user.Role = "User";
-                byte[] passwordHash, passwordSalt;
-                UserService.CreatePasswordHash(model.Password, out passwordHash, out passwordSalt);
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
+                // Check if email already exists
+                Console.WriteLine(user.Email);
+                var usercheck = await _userService.GetUserByEmailAsync(user.Email);
 
-                _userService.Add(user);
-
-                if (await _userService.SaveChangesAsync())
+                if (usercheck == null)
                 {
-                    return Created($"api/user/{user.UserId}", _mapper.Map<OutputUserModel>(user));
+                    // Create new User
+                    user.Wallet = new Wallet();
+                    user.Role = "User";
+                    byte[] passwordHash, passwordSalt;
+                    UserService.CreatePasswordHash(model.Password, out passwordHash, out passwordSalt);
+                    user.PasswordHash = passwordHash;
+                    user.PasswordSalt = passwordSalt;
+
+                    _userService.Add(user);
+
+                    if (await _userService.SaveChangesAsync())
+                    {
+                        return Created($"api/user/{user.UserId}", _mapper.Map<OutputUserModel>(user));
+                    }
+
+                }
+
+                else
+                {
+                    return this.StatusCode(StatusCodes.Status400BadRequest, $"E-mail already in use");
                 }
             }
             catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure");
             }
 
             return BadRequest();

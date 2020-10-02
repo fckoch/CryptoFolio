@@ -9,8 +9,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import './RegisterForm.css';
+import { Redirect } from "react-router-dom";
 import AuthService from '../../services/authenticationService.js'
+import { watchFile } from 'fs';
 
 const styles = theme => ({
   paper: {
@@ -54,9 +56,17 @@ class SignUp extends Component {
       password: '',
       passwordError: false,
       passwordErrorMessage: '',
-      message: '',
+      formMessage: '',
       succesful: false,
+      cssboxtype: 'result-box-none'
     }
+  }
+  sleep = (milliseconds) => {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+      currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
   }
 
   onChangeFirstName(e) {
@@ -132,7 +142,6 @@ class SignUp extends Component {
       emailErrorMessage: '',
       passwordError: false,
       passwordErrorMessage: '',
-      message: '',
       succesful: false
     });
 
@@ -140,38 +149,48 @@ class SignUp extends Component {
 
     if (!err) {
       AuthService.register(
-      this.state.firstName, 
-      this.state.lastName, 
-      this.state.email, 
-      this.state.password)
-      .then(
-        response => {
-          this.setState({
-            message: response.data.message,
-            succesful: true
-          });
-        },
-        error => {
-          const resMessage =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-  
-          this.setState({
-            successful: false,
-            message: resMessage
-          });
-        }
+        this.state.firstName,
+        this.state.lastName,
+        this.state.email,
+        this.state.password
       )
-    } 
+      .then(
+          response => {
+            if (response.status >= 200 && response.status < 300) {
+              this.setState({
+                succesful: true,
+                formMessage: 'User registered sucessfully.',
+                boxcsstype: 'result-box-sucess',
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: ''
+              });
+            }
+          })
+      .catch((error) => {
+        console.log(error.response.status);
+          if (error.response.status === 400) {
+            this.setState({
+              succesful: false,
+              formMessage: 'E-mail already in use.',
+              boxcsstype: 'result-box-failure'
+            });
+          }
+
+          if (error.response.status === 500) {
+            this.setState({
+              succesful: false,
+              formMessage: 'Database failure.',
+              boxcsstype: 'result-box-failure'
+            });
+          }
+      })
+    }
   }
 
   render () {
-
     const { classes } = this.props;
-
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -197,6 +216,7 @@ class SignUp extends Component {
                   onChange={this.onChangeFirstName}
                   error={this.state.firstNameError}
                   helperText={this.state.firstNameErrorMessage}
+                  value={this.state.firstName}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -211,6 +231,7 @@ class SignUp extends Component {
                   onChange={this.onChangeLastName}
                   error={this.state.lastNameError}
                   helperText={this.state.lastNameErrorMessage}
+                  value={this.state.lastName}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -225,6 +246,7 @@ class SignUp extends Component {
                   error={this.state.emailError}
                   helperText={this.state.emailErrorMessage}
                   onChange={this.onChangeEmail}
+                  value={this.state.email}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -240,6 +262,7 @@ class SignUp extends Component {
                   error={this.state.passwordError}
                   helperText={this.state.passwordErrorMessage}
                   onChange={this.onChangePassword}
+                  value={this.state.password}
                 />
               </Grid>
             </Grid>
@@ -258,10 +281,11 @@ class SignUp extends Component {
                 <Link href="/login" variant="body2">
                   Already have an account? Sign in
                 </Link>
+                {<p className={this.state.boxcsstype}> {this.state.formMessage}</p>}
               </Grid>
             </Grid>
           </form>
-        </div>
+        </div> 
       </Container>
     )
   }
