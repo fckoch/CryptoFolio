@@ -11,6 +11,12 @@ class AuthService {
             password
         });
     }
+    login(email, password) {
+        return axios.post(API_URL + '/authenticate', {
+            email,
+            password
+        });
+    }
 }
 
 export default new AuthService;

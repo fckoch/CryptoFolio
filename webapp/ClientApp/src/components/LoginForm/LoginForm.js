@@ -11,6 +11,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import AuthService from '../../services/authenticationService.js'
+import { Redirect } from 'react-router-dom'
 
 const styles = theme => ({
   paper: {
@@ -33,7 +35,68 @@ const styles = theme => ({
 });
 
 class SignIn extends Component {
+  constructor(props) {
+    super()
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChangeEmail = this.onChangeEmail.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
 
+    this.state = {
+      email: '',
+      password: '',
+      boxcsstype: 'result-box-none',
+      formMessage: '',
+      redirect: ''
+    }
+  }
+
+  onChangeEmail(e) {
+    this.setState({
+      email: e.target.value
+    })
+  }
+
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value
+    })
+  }
+
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/wallet' />
+    }
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+
+    AuthService.login(
+      this.state.email, 
+      this.state.password
+    )
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        localStorage.setItem('user', response.data.token);
+        this.setState({
+          email: '',
+          password: '',
+          formMessage: '',
+          boxcsstype: 'result-box-none',
+          redirect: true
+        })
+      };
+    })
+    .catch(error => {
+      if (error.response.status === 400) {
+        this.setState({
+          formMessage: error.response.data,
+          boxcsstype: 'result-box-failure'
+        })
+      }
+    });   
+  }
+  
   render() {
 
     const { classes } = this.props;
@@ -59,6 +122,8 @@ class SignIn extends Component {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={this.onChangeEmail}
+              value={this.state.email}
             />
             <TextField
               variant="outlined"
@@ -70,6 +135,8 @@ class SignIn extends Component {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={this.onChangePassword}
+              value={this.state.password}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -81,6 +148,7 @@ class SignIn extends Component {
               variant="contained"
               color="primary"
               className={classes.submit}
+              onClick={this.onSubmit}
             >
               Sign In
             </Button>
@@ -89,6 +157,8 @@ class SignIn extends Component {
                 <Link href="/register" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
+                {<p className={this.state.boxcsstype}> {this.state.formMessage}</p>}
+                {this.renderRedirect()}
               </Grid>
             </Grid>
           </form>

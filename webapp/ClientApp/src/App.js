@@ -6,6 +6,7 @@ import Coins from "./Pages/Coins.js";
 import Login from "./Pages/Login.js";
 import Register from "./Pages/Register.js";
 import Navbar from "./components/Navbar/Navbar.js";
+import Wallet from "./components/Wallet/Wallet.js";
 
 
 class App extends Component {
@@ -19,6 +20,7 @@ class App extends Component {
                         <Route path="/coins" component={Coins}/>
                         <Route path="/login" component={Login}/>
                         <Route path="/register" component={Register}/>
+                        <Route path="/wallet" component={Wallet}/>
                     </Switch>
                 </div>
             </Router>

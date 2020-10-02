@@ -1,0 +1,16 @@
+.result-box-none {
+    display: none;
+}
+
+.result-box-failure {
+    margin-top: 10px;
+    padding: 20px;
+    background-color: #cfcbca;
+    width: 395px;
+    border: 1px solid #696564;
+    color: red;
+    font-family: 'Montserrat';
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: bold;
+}
