@@ -17,6 +17,16 @@ class AuthService {
             password
         });
     }
+    getTokenData() {
+        let token = localStorage.getItem('user');
+        if (token) {
+            let tokenPayload = token.split('.')[1];
+            return JSON.parse(window.atob(tokenPayload));
+        }
+    }
+    logout() {
+        localStorage.removeItem("user");
+    }
 }
 
 export default new AuthService;

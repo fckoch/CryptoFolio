@@ -34,7 +34,7 @@ namespace CryptoFolioAPI.Services
            _settings = settings;
         }
 
-        public TokenObject Authenticate(string username, string password, string role)
+        public TokenObject Authenticate(string email, string password, string role, string firstName, string lastName)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.Value.Secret);
@@ -42,8 +42,11 @@ namespace CryptoFolioAPI.Services
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, username),
-                    new Claim(ClaimTypes.Role, role)
+                    new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.Role, role),
+                    new Claim(ClaimTypes.NameIdentifier, firstName),
+                    new Claim(ClaimTypes.Name,lastName),
+
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

@@ -77,7 +77,7 @@ class SignIn extends Component {
     )
     .then(response => {
       if (response.status >= 200 && response.status < 300) {
-        localStorage.setItem('user', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.token).replace(/\"/g,''));
         this.setState({
           email: '',
           password: '',
@@ -85,14 +85,19 @@ class SignIn extends Component {
           boxcsstype: 'result-box-none',
           redirect: true
         })
+        this.props.onUserChange('signin');
       };
     })
     .catch(error => {
-      if (error.response.status === 400) {
-        this.setState({
-          formMessage: error.response.data,
-          boxcsstype: 'result-box-failure'
-        })
+      if (error.response.status)
+        if (error.response.status === 400) {
+          this.setState({
+            formMessage: error.response.data,
+            boxcsstype: 'result-box-failure'
+          })
+        }
+      else {
+        console.log(error);
       }
     });   
   }

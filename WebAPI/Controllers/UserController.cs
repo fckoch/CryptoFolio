@@ -124,7 +124,7 @@ namespace CryptoFolioAPI.Controllers
                 if (user == null || (!UserService.VerifyPasswordHash(model.Password, user.PasswordHash, user.PasswordSalt)))
                     return BadRequest("Wrong user or password");
                 
-                var token = _userService.Authenticate(model.Email, model.Password, user.Role);
+                var token = _userService.Authenticate(model.Email, model.Password, user.Role, user.FirstName, user.LastName);
 
                 if (token == null)
                     return BadRequest("Authentication error");

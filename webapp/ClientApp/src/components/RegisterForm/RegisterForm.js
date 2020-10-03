@@ -12,7 +12,6 @@ import Container from '@material-ui/core/Container';
 import './RegisterForm.css';
 import { Redirect } from "react-router-dom";
 import AuthService from '../../services/authenticationService.js'
-import { watchFile } from 'fs';
 
 const styles = theme => ({
   paper: {
