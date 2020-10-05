@@ -60,14 +60,7 @@ class SignUp extends Component {
       cssboxtype: 'result-box-none'
     }
   }
-  sleep = (milliseconds) => {
-    const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
-  }
-
+  
   onChangeFirstName(e) {
     this.setState({
       firstName: e.target.value

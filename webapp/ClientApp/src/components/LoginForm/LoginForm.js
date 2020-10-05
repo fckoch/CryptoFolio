@@ -43,7 +43,11 @@ class SignIn extends Component {
 
     this.state = {
       email: '',
+      emailError: false,
+      emailErrorMessage: '',
       password: '',
+      passwordError: false,
+      PasswordErrorMessage: '',
       boxcsstype: 'result-box-none',
       formMessage: '',
       redirect: ''
@@ -62,6 +66,27 @@ class SignIn extends Component {
     })
   }
 
+  validate = () => {
+    let isError = false;
+    if (this.state.email.length === 0) {
+      isError = true
+      this.setState({
+        emailError: true,
+        emailErrorMessage: 'Please enter an e-mail'
+      })
+    }
+
+    if (this.state.password.length === 0) {
+      isError = true
+      this.setState({
+        passwordError: true,
+        PasswordErrorMessage: 'Please enter a password'
+      })
+    }
+
+    return isError;
+  }
+
   renderRedirect = () => {
     if (this.state.redirect) {
       return <Redirect to='/wallet' />
@@ -71,35 +96,49 @@ class SignIn extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    AuthService.login(
-      this.state.email, 
-      this.state.password
-    )
-    .then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        localStorage.setItem('user', JSON.stringify(response.data.token).replace(/\"/g,''));
-        this.setState({
-          email: '',
-          password: '',
-          formMessage: '',
-          boxcsstype: 'result-box-none',
-          redirect: true
-        })
-        this.props.onUserChange('signin');
-      };
+    this.setState({
+      emailError: false,
+      emailErrorMessage: '',
+      passwordError: false,
+      PasswordErrorMessage: '',
+      formMessage: '',
+      boxcsstype: 'result-box-none',
     })
-    .catch(error => {
-      if (error.response.status)
-        if (error.response.status === 400) {
+
+    const err = this.validate();
+
+
+    if (!err) {
+      AuthService.login(
+        this.state.email, 
+        this.state.password
+      )
+      .then(response => {
+        if (response.status >= 200 && response.status < 300) {
+          localStorage.setItem('user', JSON.stringify(response.data.token).replace(/\"/g,''));
           this.setState({
-            formMessage: error.response.data,
-            boxcsstype: 'result-box-failure'
+            email: '',
+            password: '',
+            formMessage: '',
+            boxcsstype: 'result-box-none',
+            redirect: true
           })
+          this.props.onUserChange('signin');
+        };
+      })
+      .catch(error => {
+        if (error.response.status)
+          if (error.response.status === 400) {
+            this.setState({
+              formMessage: error.response.data,
+              boxcsstype: 'result-box-failure'
+            })
+          }
+        else {
+          console.log(error);
         }
-      else {
-        console.log(error);
-      }
-    });   
+      });   
+    }
   }
   
   render() {
@@ -129,6 +168,8 @@ class SignIn extends Component {
               autoFocus
               onChange={this.onChangeEmail}
               value={this.state.email}
+              error={this.state.emailError}
+              helperText={this.state.emailErrorMessage}
             />
             <TextField
               variant="outlined"
@@ -142,6 +183,8 @@ class SignIn extends Component {
               autoComplete="current-password"
               onChange={this.onChangePassword}
               value={this.state.password}
+              error={this.state.passwordError}
+              helperText={this.state.PasswordErrorMessage}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

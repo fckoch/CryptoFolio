@@ -29,7 +29,7 @@ html::-webkit-scrollbar {
 }
 
 .coin-table tbody tr:hover {
-    background-color: #ececec
+    background-color: #faf9f9;
 }
 .th-center {
     text-align: center;

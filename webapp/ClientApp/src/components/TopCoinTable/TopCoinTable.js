@@ -70,8 +70,8 @@ class TopCoinTable extends Component {
 
     render () {
         return (
-            <div>
-                <table class="coin-table">
+            <div className="container-top-coin">
+                <table className="coin-table">
                     <thead>
                         {this.renderTopCoinTableHeader()}
                     </thead>

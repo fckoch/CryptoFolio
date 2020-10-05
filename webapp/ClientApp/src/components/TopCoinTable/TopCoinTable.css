@@ -1,13 +1,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
+.container-top-coin {
+    background-color: #f7f7f7;
+    display:flex;
+}
+
 .coin-table {
     border-collapse: collapse;
-    margin: 80px 5px 10px;
+    padding: 80px 5px 10px;
     width: 60%;
+    background-color: white;
+    font-family: 'Montserrat', sans-serif;
     margin-left:auto;
     margin-right:auto;
-    background: white;
-    font-family: 'Montserrat', sans-serif;
+    border-radius: 10px;
 }
 
 .coin-table th,
@@ -16,7 +22,7 @@
 }
 
 .coin-table tbody tr:hover {
-    background-color: #ececec
+    background-color: #faf9f9
 }
 .th-center {
     text-align: center;

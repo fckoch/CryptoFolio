@@ -32,3 +32,9 @@
     background-color:#3142de;
     cursor: pointer;
 }
+
+.container-2 {
+	background-color: #f7f7f7;
+	display: flex;
+	justify-content: center;
+}
