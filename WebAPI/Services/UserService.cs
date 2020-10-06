@@ -34,7 +34,7 @@ namespace CryptoFolioAPI.Services
            _settings = settings;
         }
 
-        public TokenObject Authenticate(string email, string password, string role, string firstName, string lastName)
+        public TokenObject Authenticate(string email, string password, string role, string firstName, string lastName, int walletId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.Value.Secret);
@@ -46,6 +46,7 @@ namespace CryptoFolioAPI.Services
                     new Claim(ClaimTypes.Role, role),
                     new Claim(ClaimTypes.NameIdentifier, firstName),
                     new Claim(ClaimTypes.Name,lastName),
+                    new Claim(ClaimTypes.SerialNumber, walletId.ToString())
 
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
@@ -76,7 +77,7 @@ namespace CryptoFolioAPI.Services
         public async Task<User> GetUserByEmailAsync(string Email)
         {
             IQueryable<User> query = _context.Users;
-            query = query.Where(u => u.Email == Email);
+            query = query.Where(u => u.Email == Email).Include(c => c.Wallet);
 
             return await query.FirstOrDefaultAsync();
         }

@@ -1,0 +1,8 @@
+.modal-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.autocomplete-wrapper {
+    padding: 50px;
+}

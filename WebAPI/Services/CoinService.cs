@@ -43,5 +43,12 @@ namespace CryptoFolioAPI.Services
             return (await _context.SaveChangesAsync()) > 0;
         }
 
+        public async Task<Coin[]> GetCoinsList()
+        {
+            IQueryable<Coin> query = _context.Coin;
+            query = query.OrderByDescending(c => c.MarketCap).Take(1000);
+            return await query.ToArrayAsync();
+        }
+
     }
 }

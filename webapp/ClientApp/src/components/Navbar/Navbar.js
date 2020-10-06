@@ -22,9 +22,7 @@ class Navbar extends Component {
         const user = AuthService.getTokenData();
         console.log(user);
         if (user) {
-            this.setState({
-                userState: logedIn
-            })
+            this.props.onUserChange('signin');
         }
     }
 

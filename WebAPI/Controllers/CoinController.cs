@@ -74,6 +74,22 @@ namespace CryptoFolioAPI.Controllers
             }
         }
 
+        [HttpGet("list")]
+        public async Task<ActionResult<List<AutocompleteCoinModel>>> GetCoinNameList ()
+        {
+            try
+            {
+                var coins = await _coinService.GetCoinsList();
+                return _mapper.Map<AutocompleteCoinModel[]>(coins).ToList();
+
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+        }
+
         //Update coin value
         [HttpPut("{id:int}")]
         public async Task<ActionResult<CoinModel>> Put(int id, CoinModel model)
