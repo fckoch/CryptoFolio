@@ -1,12 +1,17 @@
 import React from 'react';
 import TopCoinTable from "../components/TopCoinTable/TopCoinTable.js";
-import ViewMoreButton from "../components/ViewMoreButton/ViewMoreButton.js";
+import Button from "../components/Button/Button.js";
+import { Link } from "react-router-dom";
 
 const Home = () => {
     return (
         <div>
             <TopCoinTable/>
-            <ViewMoreButton/>
+            <div>
+                <Link to="/coins">
+                    <Button label="View more coins" type="primary"/>
+                </Link>
+            </div>
         </div>
     );
 }

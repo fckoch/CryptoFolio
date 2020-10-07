@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import AuthService from '../../services/authenticationService.js';
 import './Wallet.css';
 import CoinForm from '../CoinForm/CoinForm.js';
+import Button from "../Button/Button.js";
 
 class Wallet extends Component {
     constructor(props) {
@@ -39,7 +40,7 @@ class Wallet extends Component {
                     <header className="header">
                         <div className="header-wrapper">
                             <div className="button-wrapper">
-                                <button className="add-coin-button" onClick={this.showModal}>Add new coin</button>
+                                <Button className="add-coin-button" handleClick={this.showModal} label="Add new coin" type="secundary"/>
                             </div>
                             <div className="gains-wrapper">
                                 <table className="gains-table">
@@ -90,7 +91,7 @@ class Wallet extends Component {
                     </div>
                 </div>
                 <Modal className="modal" isOpen={this.state.modalIsOpen}>
-                    <CoinForm showModal={this.showModal} hideModal={this.hideModal}/>
+                    <CoinForm walletid={certserialnumber} showModal={this.showModal} hideModal={this.hideModal}/>
                 </Modal>
             </div>
         )

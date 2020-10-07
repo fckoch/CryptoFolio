@@ -1,4 +1,4 @@
-.view-more-button {
+.button {
 	background-color: #4040f7;
 	-webkit-border-top-left-radius:11px;
 	-moz-border-radius-topleft:11px;
@@ -21,20 +21,24 @@
     height:48px;
     line-height:48px;
     width: auto;
-    margin-left:auto;
-    margin-right:auto;
     padding: 0 15px 5px 15px;
     text-align: center;
-    margin-top: 30px;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
-.view-more-button:hover {
+.button:hover {
     background-color:#3142de;
     cursor: pointer;
 }
 
-.container-2 {
+.primary {
 	background-color: #f7f7f7;
+	display: flex;
+	justify-content: center;
+}
+
+.secundary {
+	background-color: white;
 	display: flex;
 	justify-content: center;
 }

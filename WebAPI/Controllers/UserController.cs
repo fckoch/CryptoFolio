@@ -106,7 +106,7 @@ namespace CryptoFolioAPI.Controllers
             }
             catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
             }
 
             return BadRequest();

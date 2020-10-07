@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Models
 {
-    public class AutocompleteCoinModel
+    public class NameCoinModel
     {
         public string CoinName { get; set; }
     }

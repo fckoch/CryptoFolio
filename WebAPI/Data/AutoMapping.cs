@@ -32,7 +32,7 @@ namespace CryptoFolioAPI.Data
             CreateMap<Coin, CoinModel>()
             .ReverseMap();
 
-            CreateMap<Coin, AutocompleteCoinModel>()
+            CreateMap<Coin, NameCoinModel>()
             .ReverseMap();
 
             CreateMap<WalletCoin, InputWalletCoinModel>()

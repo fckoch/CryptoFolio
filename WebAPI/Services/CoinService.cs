@@ -30,7 +30,14 @@ namespace CryptoFolioAPI.Services
             return await PagedList<Coin>.ToPagedListAsync(query, coinParameters.PageNumber, coinParameters.PageSize);
         }
 
-        public async Task<Coin> GetCoinAsync(int Id)
+        public async Task<Coin> GetCoinByNameAsync(string coinName)
+        {
+            IQueryable<Coin> query = _context.Coin;
+            query = query.Where(c => c.CoinName == coinName);
+            return await query.FirstOrDefaultAsync();
+        }
+
+        public async Task<Coin> GetCoinByIdAsync(int Id)
         {
             IQueryable<Coin> query = _context.Coin;
             query = query.Where(c => c.CoinId == Id);

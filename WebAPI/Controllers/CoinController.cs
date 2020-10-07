@@ -62,7 +62,7 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-                var coin = await _coinService.GetCoinAsync(id);
+                var coin = await _coinService.GetCoinByIdAsync(id);
                 if (coin == null)
                     return NotFound("Coin not found");
                 return _mapper.Map<CoinModel>(coin);
@@ -75,13 +75,30 @@ namespace CryptoFolioAPI.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<ActionResult<List<AutocompleteCoinModel>>> GetCoinNameList ()
+        public async Task<ActionResult<List<NameCoinModel>>> GetCoinNameList ()
         {
             try
             {
                 var coins = await _coinService.GetCoinsList();
-                return _mapper.Map<AutocompleteCoinModel[]>(coins).ToList();
+                return _mapper.Map<NameCoinModel[]>(coins).ToList();
 
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+        }
+
+        //Get coin by Name
+        public async Task<ActionResult<CoinModel>> Post(NameCoinModel model)
+        {
+            try
+            {
+                var coin = await _coinService.GetCoinByNameAsync(model.CoinName);
+                if (coin == null)
+                    return NotFound("Coin not found");
+                return _mapper.Map<CoinModel>(coin);
             }
             catch (Exception ex)
             {
@@ -96,7 +113,7 @@ namespace CryptoFolioAPI.Controllers
         {
             try
             {
-                var coin = await _coinService.GetCoinAsync(id);
+                var coin = await _coinService.GetCoinByIdAsync(id);
                 if (coin == null)
                     return NotFound("Coin not found");
 

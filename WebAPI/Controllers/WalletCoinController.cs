@@ -70,7 +70,7 @@ namespace CryptoFolioAPI.Controllers
                 if (wallet == null) return BadRequest("Wallet does not exist");
 
                 var walletcoin = _mapper.Map<WalletCoin>(model);
-                walletcoin.Coin = await _coinService.GetCoinAsync(walletcoin.Coin.CoinId);
+                walletcoin.Coin = await _coinService.GetCoinByIdAsync(walletcoin.Coin.CoinId);
                 walletcoin.WalletId = wallet.WalletId;
 
                 wallet.Walletcoins.Add(walletcoin);

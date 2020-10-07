@@ -58,15 +58,7 @@
     padding: 15px 20px;
 }
 
-button {
-    padding: 0.85rem;
-    background-color: blueviolet;
-    color: white;
-    cursor: pointer;
-    border-radius: 10px;
-  }
-
-  .ReactModal__Overlay {
+.ReactModal__Overlay {
     z-index: 99;
     position: absolute;
     left: 0;
@@ -83,8 +75,8 @@ button {
     overflow: auto;
     border-radius: 4px;
     outline: none;
-    width: 400px;
-    height: 400px;
+    width: 450px;
+    height: 340px;
 }
 
 .modal {
