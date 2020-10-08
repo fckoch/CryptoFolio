@@ -4,14 +4,16 @@ using CryptoFolioAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CryptoFolioAPI.Migrations
 {
     [DbContext(typeof(CryptoFolioContext))]
-    partial class UserContextModelSnapshot : ModelSnapshot
+    [Migration("20201007175106_added amount to walletcoin")]
+    partial class addedamounttowalletcoin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

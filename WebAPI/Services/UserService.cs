@@ -34,7 +34,7 @@ namespace CryptoFolioAPI.Services
            _settings = settings;
         }
 
-        public TokenObject Authenticate(string email, string password, string role, string firstName, string lastName, int walletId)
+        public TokenObject Authenticate(string email, string password, string role, int userId, string firstName, int walletId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_settings.Value.Secret);
@@ -44,8 +44,8 @@ namespace CryptoFolioAPI.Services
                 {
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, role),
-                    new Claim(ClaimTypes.NameIdentifier, firstName),
-                    new Claim(ClaimTypes.Name,lastName),
+                    new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+                    new Claim(ClaimTypes.Name,firstName),
                     new Claim(ClaimTypes.SerialNumber, walletId.ToString())
 
                 }),

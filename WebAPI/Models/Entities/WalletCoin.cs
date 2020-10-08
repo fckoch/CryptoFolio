@@ -17,5 +17,6 @@ namespace CryptoFolioAPI.Models.Entities
         public decimal ValueWhenBought { get; set; }
         public DateTime BuyDate { get; set; }
         public int WalletId { get; set; }
+        public decimal Amount { get; set; }
     }
 }

@@ -31,11 +31,11 @@ namespace CryptoFolioAPI.Services
 
         }
 
-        public async Task<WalletCoin[]> GetWalletCoinsAsync(int WallteId)
+        public async Task<WalletCoin[]> GetWalletCoinsAsync(int WalletId)
         {
             IQueryable<WalletCoin> query = _context.WalletCoins;
 
-            query = query.Where(wc => wc.WalletId == WallteId).Include(wc => wc.Coin);
+            query = query.Where(wc => wc.WalletId == WalletId).Include(wc => wc.Coin);
 
             return await query.ToArrayAsync();
         }
@@ -44,6 +44,11 @@ namespace CryptoFolioAPI.Services
         {
             // Only returns success if at least one row was changed
             return (await _context.SaveChangesAsync()) > 0;
+        }
+
+        public void Delete(WalletCoin entity)
+        {
+            _context.WalletCoins.Remove(entity);
         }
     }
 }

@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace CryptoFolioAPI.Models
 {
-    public class OutputWalletCoinModel
+    public class InputWalletCoinUpdateModel
     {
-        public int WalletCoinId { get; set; }
         public int CoinId { get; set; }
         public string CoinName { get; set; }
         public DateTime BuyDate { get; set; }

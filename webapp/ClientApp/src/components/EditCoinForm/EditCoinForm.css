@@ -1,0 +1,35 @@
+.modal-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: auto;
+    margin: 20px;
+    outline-style: solid;
+    outline-color: #ebebeb;
+    outline-width: 0.5px;
+}
+
+.autocomplete-wrapper {
+    padding-top: 20px;
+    padding-bottom: 5px;
+}
+
+.price-wrapper {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+}
+
+.quantity-wrapper {
+    padding: 5px;
+}
+
+.buttons-wrap {
+    display: flex;
+    justify-content: space-evenly;
+    width: 300px;
+}

@@ -39,10 +39,12 @@
 
 .gains-table th {
     padding: 5px;
+    display: none;
 }
 
 .gains-table td {
     padding: 5px 17px;
+    display: none;
 }
 
 .wallet-table {
@@ -51,6 +53,14 @@
     font-family: 'Montserrat', sans-serif;
     margin-left:auto;
     margin-right:auto;
+}
+
+.wallet-table tbody td {
+    border-bottom: 1px solid #dddddd;
+}
+
+.wallet-table tbody tr:hover {
+    background-color: #faf9f9
 }
 
 .wallet-table th,
@@ -85,3 +95,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
  }
+
+.td-center {
+    text-align: center;
+}

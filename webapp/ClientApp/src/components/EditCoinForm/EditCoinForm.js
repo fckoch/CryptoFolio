@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import AppBar from '@material-ui/core/AppBar';  
 import Toolbar from '@material-ui/core/Toolbar'; 
 import axios from 'axios'; 
-import './CoinForm.css';
+import './EditCoinForm.css';
 import Button from "../Button/Button.js";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -37,7 +37,7 @@ const styles = theme => ({
     }
 });
 
-class CoinForm extends Component {
+class EditCoinForm extends Component {
     constructor(props) {
         super()
 
@@ -48,7 +48,7 @@ class CoinForm extends Component {
             coinName: '',
             coinId: '',
             buyPrice: '',
-            quantity: '',
+            amount: '',
         }
     }
 
@@ -81,9 +81,9 @@ class CoinForm extends Component {
         })
     }
 
-    onChangeQuantity = (e) => {
+    onChangeAmount = (e) => {
         this.setState({
-            quantity: e.target.value
+            amount: e.target.value
         })
     }
 
@@ -91,7 +91,8 @@ class CoinForm extends Component {
         WalletCoinService.addNewCoin(
             this.props.walletid,
             this.state.coinId,
-            this.state.buyPrice
+            this.state.buyPrice,
+            this.state.amount
         ).then(response => {
             console.log(response)
             this.setState({
@@ -100,7 +101,8 @@ class CoinForm extends Component {
                 buyPrice: '',
                 quantity: '',
             })
-            this.props.hideModal();
+            this.props.hideEditCoinModal();
+            this.props.refreshWalletCoins();
         }).catch(error => {
             console.log(error);
         })
@@ -164,17 +166,17 @@ class CoinForm extends Component {
                     shrink: true,
                     }}
                     variant="outlined"
-                    onChange={this.onChangeQuantity}
-                    value={this.state.quantity}
+                    onChange={this.onChangeAmount}
+                    value={this.state.amount}
                     />
                 </div>
                 <div className="buttons-wrap">
-                    <Button handleClick={this.props.hideModal} label="Cancel" type="secundary"/>
-                    <Button handleClick={this.onSubmit} label="Submit" type="secundary"/>
+                    <Button handleClick={this.props.hideEditCoinModal} label="Cancel" type="secundary"/>
+                    <Button handleClick={this.onSubmit} label="Submit changes" type="secundary"/>
                 </div>
             </div>
         );
     }
 }
 
-export default withStyles(styles)(CoinForm);
+export default withStyles(styles)(EditCoinForm);

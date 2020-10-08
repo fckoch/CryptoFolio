@@ -90,5 +90,54 @@ namespace CryptoFolioAPI.Controllers
             }
         }
 
+        //Update walletcoin data
+        [HttpPut("{walletcoinid:int}")]
+        public async Task<ActionResult<OutputWalletCoinModel>> Put(int WalletId, int walletcoinid, InputWalletCoinUpdateModel model)
+        {
+            try
+            {
+                var oldwalletcoin = await _walletCoinService.GetWalletCoinAsync(WalletId, walletcoinid);
+                if (oldwalletcoin == null) return NotFound("Coin not found");
+
+                _mapper.Map(model, oldwalletcoin);
+
+                if (await _walletCoinService.SaveChangesAsync())
+                {
+                    return _mapper.Map<OutputWalletCoinModel>(oldwalletcoin);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+
+            return BadRequest("Failed to update the coin");
+        }
+
+        //Delete walletcoin from wallet
+        [HttpDelete("{walletcoinid:int}")]
+        public async Task<IActionResult> Delete (int WalletId, int walletcoinid)
+        {
+            try
+            {
+                var walletcoin = await _walletCoinService.GetWalletCoinAsync(WalletId, walletcoinid);
+                if (walletcoin == null) return NotFound("Coin not found");
+
+                _walletCoinService.Delete(walletcoin);
+
+                if (await _walletCoinService.SaveChangesAsync())
+                {
+                    return Ok();
+                }
+            }
+
+
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Database Failure - {ex.ToString()}");
+            }
+
+            return BadRequest("Failed to delete the walletcoin");
+        }
     }
 }
