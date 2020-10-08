@@ -35,7 +35,14 @@ class Wallet extends Component {
             addCoinModalIsOpen: false,
             editCoinModalIsOpen: false,
             walletCoins: [],
-            networth: ''
+            networth: '',
+            editTargetCoinId: '',
+            editTargetCoinName: '',
+            editTargetBuyDate: '',
+            editTargetValueWhenBought: '',
+            editTargetCurrentValue: '',
+            editTargetAmount: '',
+            editTargetWalletCoinId: ''
         }
     }
 
@@ -76,9 +83,16 @@ class Wallet extends Component {
         })
     }
 
-    showEditCoinModal = () => {
+    showEditCoinModal = (coinId, coinName, buyDate, valueWhenBought, currentValue, amount, walletCoinId) => {
         this.setState({
-            editCoinModalIsOpen: true
+            editCoinModalIsOpen: true,
+            editTargetCoinId: coinId,
+            editTargetCoinName: coinName,
+            editTargetBuyDate: buyDate,
+            editTargetValueWhenBought: valueWhenBought,
+            editTargetCurrentValue: currentValue,
+            editTargetAmount: amount,
+            editTargetWalletCoinId: walletCoinId
         })
     }
 
@@ -133,7 +147,7 @@ class Wallet extends Component {
                     <td className="td-right">{(Math.round(((currentValue/valueWhenBought)-1)*100000)/1000).toFixed(2) + " %"}</td>
                     <td className="td-right">{this.applyUSDFormat(((amount * currentValue) - (amount * valueWhenBought)).toFixed(2))}</td>
                     <td className="td-right">{this.applyUSDFormat((amount * currentValue).toFixed(2))}</td>
-                    <td><EditIcon className={classes.EditIcon} color="action" onClick={() => {this.showEditCoinModal()}}/></td>
+                    <td><EditIcon className={classes.EditIcon} color="action" onClick={() => {this.showEditCoinModal(coinId, coinName, buyDate, valueWhenBought, currentValue, amount, walletCoinId)}}/></td>
                     <td><DeleteOutlineIcon className={classes.DeleteOutlineIcon} color="action" onClick={() => {this.deleteCoin(this.state.walletId, walletCoinId)}}/></td>
                 </tr>
             )
@@ -195,7 +209,18 @@ class Wallet extends Component {
                     <AddCoinForm walletid={this.state.walletId} showAddCoinModal={this.showAddCoinModal} hideAddCoinModal={this.hideAddCoinModal} refreshWalletCoins={this.refreshWalletCoins}/>
                 </Modal>
                 <Modal className="modal" isOpen={this.state.editCoinModalIsOpen}>
-                    <EditCoinForm walletid={this.state.walletId} showEditCoinModal={this.showEditCoinModal} hideEditCoinModal={this.hideEditCoinModal} refreshWalletCoins={this.refreshWalletCoins}/>
+                    <EditCoinForm 
+                    editTargetCoinId={this.state.editTargetCoinId}
+                    editTargetCoinName={this.state.editTargetCoinName}
+                    editTargetBuyDate={this.state.editTargetBuyDate}
+                    editTargetValueWhenBought={this.state.editTargetValueWhenBought}
+                    editTargetCurrentValue={this.state.editTargetCurrentValue}
+                    editTargetAmount={this.state.editTargetAmount}
+                    walletid={this.state.walletId}
+                    editTargetWalletCoinId={this.state.editTargetWalletCoinId}
+                    showEditCoinModal={this.showEditCoinModal} 
+                    hideEditCoinModal={this.hideEditCoinModal} 
+                    refreshWalletCoins={this.refreshWalletCoins}/>
                 </Modal>
             </div>
         )

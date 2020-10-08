@@ -45,14 +45,29 @@ class EditCoinForm extends Component {
             coinList: [],
             loading: true,
             walletId: '',
-            coinName: '',
-            coinId: '',
-            buyPrice: '',
-            amount: '',
+            editTargetCoinId: '',
+            editTargetCoinName: '',
+            editTargetBuyDate: '',
+            editTargetValueWhenBought: '',
+            editTargetCurrentValue: '',
+            editTargetAmount: '',
+            editTargetWalletCoinId: ''
         }
     }
 
     componentDidMount() {
+
+        this.setState({
+            walletId: this.props.walletid,
+            editTargetCoinId: this.props.editTargetCoinId,
+            editTargetCoinName: this.props.editTargetCoinName,
+            editTargetBuyDate: this.props.editTargetBuyDate,
+            editTargetValueWhenBought: this.props.editTargetValueWhenBought,
+            editTargetCurrentValue: this.props.editTargetCurrentValue,
+            editTargetAmount: this.props.editTargetAmount,
+            editTargetWalletCoinId: this.props.editTargetWalletCoinId
+        })
+        
         let coinList = [];
         let coin;
 
@@ -60,46 +75,52 @@ class EditCoinForm extends Component {
             const response = await axios.get('https://localhost:5001/api/coins/list')
             for (coin of response.data) {
                 coinList.push(coin.coinName);
-                    //console.log(response.data[1].coinName)
                 }
             this.setState({
                 coinList: coinList,
-                walletId: this.props.walletid,
             })
         })();
     }
 
     onChangeCoinName = (event, values) => {
         this.setState({
-          coinName: values
+            editTargetCoinName: values
         })
     }
 
     onChangePrice = (e) => {
         this.setState({
-            buyPrice: e.target.value
+            editTargetValueWhenBought: e.target.value
         })
     }
 
     onChangeAmount = (e) => {
         this.setState({
-            amount: e.target.value
+            editTargetAmount: e.target.value
         })
     }
 
     onSubmit = () => {
-        WalletCoinService.addNewCoin(
-            this.props.walletid,
-            this.state.coinId,
-            this.state.buyPrice,
-            this.state.amount
-        ).then(response => {
+        WalletCoinService.editCoin(
+            this.state.editTargetCoinId,
+            this.state.editTargetCoinName,
+            this.state.editTargetBuyDate,
+            this.state.editTargetValueWhenBought,
+            this.state.editTargetCurrentValue,
+            this.state.editTargetAmount,
+            this.state.walletId,
+            this.state.editTargetWalletCoinId
+
+        )
+        .then(response => {
             console.log(response)
             this.setState({
-                coinName: '',
-                coinId: '',
-                buyPrice: '',
-                quantity: '',
+                editTargetCoinId: '',
+                editTargetCoinName: '',
+                editTargetBuyDate: '',
+                editTargetValueWhenBought: '',
+                editTargetCurrentValue: '',
+                editTargetAmount: ''
             })
             this.props.hideEditCoinModal();
             this.props.refreshWalletCoins();
@@ -109,10 +130,10 @@ class EditCoinForm extends Component {
     }
 
     updateCoinData = () => {
-        CoinService.getCoinData(this.state.coinName).then(response => {
+        CoinService.getCoinData(this.state.editTargetCoinName).then(response => {
             this.setState({
-                buyPrice: response.data.currentValue,
-                coinId: response.data.coinId
+                editTargetValueWhenBought: response.data.currentValue,
+                editTargetCoinId: response.data.coinId
             });
         })
     }
@@ -132,7 +153,7 @@ class EditCoinForm extends Component {
                         loading={this.state.loading}
                         loadingText='Loading...'
                         onChange={this.onChangeCoinName}
-                        value={this.state.coinName}
+                        value={this.state.editTargetCoinName}
                         getOptionSelected= {(
                             option,
                             value,
@@ -149,7 +170,7 @@ class EditCoinForm extends Component {
                         labelWidth={60}
                         style={{ width: 300 }}
                         onChange={this.onChangePrice}
-                        value={this.state.buyPrice}
+                        value={this.state.editTargetValueWhenBought}
                     />
                     </FormControl>
                     <div>
@@ -167,7 +188,7 @@ class EditCoinForm extends Component {
                     }}
                     variant="outlined"
                     onChange={this.onChangeAmount}
-                    value={this.state.amount}
+                    value={this.state.editTargetAmount}
                     />
                 </div>
                 <div className="buttons-wrap">
