@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CryptoFolioAPI.Models.Entities
+namespace CryptoFolioWorkerService
 {
     public class WalletCoin
     {

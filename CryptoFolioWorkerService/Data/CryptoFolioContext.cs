@@ -14,5 +14,8 @@ namespace CryptoFolioWorkerService.Data
         }
 
         public DbSet<Coin> Coin { get; set; }
+        public DbSet<WalletCoin> WalletCoins { get; set; }
+        public DbSet<Wallet> Wallets { get; set; }
+        public DbSet<Networth> Networth { get; set; }
     }
 }

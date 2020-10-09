@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using CryptoFolioWorkerService.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -34,6 +35,7 @@ namespace CryptoFolioWorkerService
                 using var scope = _serviceScopeFactory.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<CryptoFolioContext>();
 
+                
                 //CryptoQuote API Request
                 var httpClient = scope.ServiceProvider.GetRequiredService<IHttpClientFactory>().CreateClient();
                 var url = "https://api.nomics.com/v1/currencies/ticker?key=8f36e5ca523d2a50571ba779b506fc1e";
@@ -49,6 +51,8 @@ namespace CryptoFolioWorkerService
 
                 int addCount = 0;
                 int updateCount = 0;
+
+                
 
                 foreach (var coin in cryptoQuoteCoinList)
                 {
@@ -127,7 +131,48 @@ namespace CryptoFolioWorkerService
                     Console.WriteLine($"{addCount} coins were added");
                     Console.WriteLine($"{updateCount} coins were updated");
 
-                await Task.Delay(10000, stoppingToken);
+                
+                
+                //Networth update
+
+                var dbWallets = await dbContext.Wallets.Include(w => w.Walletcoins).ThenInclude(w => w.Coin).ToArrayAsync();
+                var dbNetworth = await dbContext.Networth.ToArrayAsync();
+
+
+                //Checks last date updated and compares to current date
+                if (dbNetworth[^1].Date != new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, DateTime.Now.Hour, 0, 0))
+                {   
+
+                    //Loops through wallets, calculates networth and add to db
+
+                    var networthAdd = 0;
+                    
+                    foreach (var wallet in dbWallets)
+                    {
+                        Networth networth = new Networth();
+
+                        decimal walletNetWorth = 0;
+                        foreach (var walletCoin in wallet.Walletcoins)
+                        {
+                            var walletCoinValue = walletCoin.Amount * walletCoin.Coin.CurrentValue;
+                            walletNetWorth += walletCoinValue;
+                        }
+                        Console.WriteLine($"Wallet {wallet.WalletId} has a networth of {walletNetWorth}");
+                        networth.WalletId = wallet.WalletId;
+                        networth.NetworthValue = walletNetWorth;
+                        networth.Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, DateTime.Now.Hour, 0, 0);
+                        dbContext.Networth.Add(networth);
+                        networthAdd++;
+                    }
+
+                    if (await dbContext.SaveChangesAsync() > 0)
+                    {
+                        Console.WriteLine($"{networthAdd} networths were added");
+                    }
+
+                }
+
+                await Task.Delay(1000, stoppingToken);
 
             }
         }
