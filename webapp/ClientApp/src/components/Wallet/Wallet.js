@@ -31,6 +31,7 @@ class Wallet extends Component {
 
         this.state = {
             userId: '',
+            userName: '',
             walletId: '',
             addCoinModalIsOpen: false,
             editCoinModalIsOpen: false,
@@ -53,8 +54,10 @@ class Wallet extends Component {
             const response = await axios.get(`https://localhost:5001/api/users/${nameid}`)
             this.setState({
                 userId: response.data.userId,
+                userName: response.data.firstName,
                 walletId: response.data.wallet.walletId,
-                walletCoins: response.data.wallet.walletcoins
+                walletCoins: response.data.wallet.walletcoins,
+
             })
             this.calculateNetWorth();
         })();
@@ -118,13 +121,6 @@ class Wallet extends Component {
         })();
     }
 
-    /*editCoin = () => {
-        (async () => {
-            await WalletCoinService.editCoin(coinId, coinName, buyDate, valueWhenBought, currentValue, amount, walletCoinId);
-        this.refreshWalletCoins();
-        })();
-    }*/
-
     applyUSDFormat = (data) => {
         return Intl.NumberFormat(
             'en-US',
@@ -162,6 +158,7 @@ class Wallet extends Component {
                     <header className="header">
                         <div className="header-wrapper">
                             <div className="button-wrapper">
+                                <h1>{this.state.userName}'s Wallet</h1>
                                 <Button className="add-coin-button" handleClick={this.showAddCoinModal} label="Add new coin" type="secundary"/>
                             </div>
                             <div className="gains-wrapper">

@@ -49,6 +49,8 @@ class AddCoinForm extends Component {
             coinId: '',
             buyPrice: '',
             amount: '',
+            amountError: '',
+            amountErrorMessage: ''
         }
     }
 
@@ -87,25 +89,47 @@ class AddCoinForm extends Component {
         })
     }
 
-    onSubmit = () => {
-        WalletCoinService.addNewCoin(
-            this.props.walletid,
-            this.state.coinId,
-            this.state.buyPrice,
-            this.state.amount
-        ).then(response => {
-            console.log(response)
+    validate = () => {
+        let isError = false;
+        if (this.state.amount.length < 1 || (/[^0-9]/i.test(this.state.amount))){
+            isError = true
             this.setState({
-                coinName: '',
-                coinId: '',
-                buyPrice: '',
-                quantity: '',
+                amountError: true,
+                amountErrorMessage: 'Please enter a valid number'
             })
-            this.props.hideAddCoinModal();
-            this.props.refreshWalletCoins();
-        }).catch(error => {
-            console.log(error);
-        })
+        }
+    }   
+
+    onSubmit = () => {
+
+        this.setState({
+            amountError: false,
+            amountErrorMessage: '',
+        });
+
+        const err = this.validate();
+
+        if (!err) {
+
+            WalletCoinService.addNewCoin(
+                this.props.walletid,
+                this.state.coinId,
+                this.state.buyPrice,
+                this.state.amount
+            ).then(response => {
+                console.log(response)
+                this.setState({
+                    coinName: '',
+                    coinId: '',
+                    buyPrice: '',
+                    quantity: '',
+                })
+                this.props.hideAddCoinModal();
+                this.props.refreshWalletCoins();
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     }
 
     updateCoinData = () => {
@@ -168,6 +192,8 @@ class AddCoinForm extends Component {
                     variant="outlined"
                     onChange={this.onChangeAmount}
                     value={this.state.amount}
+                    error={this.state.amountError}
+                    helperText={this.state.amountErrorMessage}
                     />
                 </div>
                 <div className="buttons-wrap">

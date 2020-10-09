@@ -5,7 +5,7 @@
     justify-content: center;
     width: 100%;
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: white;
 }
 
 .main {
@@ -26,7 +26,10 @@
 }
 
 .button-wrapper {
+    display: flex;
+    justify-content: center;
     padding: 10px;
+    align-items: center;
 }
 
 .gains-wrapper {
@@ -53,6 +56,7 @@
     font-family: 'Montserrat', sans-serif;
     margin-left:auto;
     margin-right:auto;
+    border: 1px solid #dddddd;
 }
 
 .wallet-table tbody td {
@@ -65,7 +69,8 @@
 
 .wallet-table th,
 .wallet-table td {
-    padding: 15px 20px;
+    padding: 15px 40px;
+    border-bottom: 1px solid #dddddd;
 }
 
 .ReactModal__Overlay {
@@ -98,4 +103,8 @@
 
 .td-center {
     text-align: center;
+}
+
+.button-wrapper h1 {
+    padding-right: 10px;
 }

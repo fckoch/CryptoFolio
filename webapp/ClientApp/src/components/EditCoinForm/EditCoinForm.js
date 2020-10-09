@@ -50,8 +50,10 @@ class EditCoinForm extends Component {
             editTargetBuyDate: '',
             editTargetValueWhenBought: '',
             editTargetCurrentValue: '',
+            editTargetWalletCoinId: '',
             editTargetAmount: '',
-            editTargetWalletCoinId: ''
+            editTargetAmountError: '',
+            editTargetAmountErrorMessage: ''
         }
     }
 
@@ -100,33 +102,55 @@ class EditCoinForm extends Component {
         })
     }
 
-    onSubmit = () => {
-        WalletCoinService.editCoin(
-            this.state.editTargetCoinId,
-            this.state.editTargetCoinName,
-            this.state.editTargetBuyDate,
-            this.state.editTargetValueWhenBought,
-            this.state.editTargetCurrentValue,
-            this.state.editTargetAmount,
-            this.state.walletId,
-            this.state.editTargetWalletCoinId
-
-        )
-        .then(response => {
-            console.log(response)
+    validate = () => {
+        let isError = false;
+        if (this.state.editTargetAmount.length < 1 ){
+            isError = true
             this.setState({
-                editTargetCoinId: '',
-                editTargetCoinName: '',
-                editTargetBuyDate: '',
-                editTargetValueWhenBought: '',
-                editTargetCurrentValue: '',
-                editTargetAmount: ''
+                editTargetAmountError: true,
+                editTargetAmountErrorMessage: 'Please enter a valid number'
             })
-            this.props.hideEditCoinModal();
-            this.props.refreshWalletCoins();
-        }).catch(error => {
-            console.log(error);
-        })
+        }
+    }  
+
+    onSubmit = () => {
+
+        this.setState({
+            editTargetAmountError: false,
+            editTargetAmountErrorMessage: '',
+        });
+
+        const err = this.validate();
+
+        if (!err) {
+
+            WalletCoinService.editCoin(
+                this.state.editTargetCoinId,
+                this.state.editTargetCoinName,
+                this.state.editTargetBuyDate,
+                this.state.editTargetValueWhenBought,
+                this.state.editTargetCurrentValue,
+                this.state.editTargetAmount,
+                this.state.walletId,
+                this.state.editTargetWalletCoinId
+
+            )
+            .then(response => {
+                console.log(response)
+                this.setState({
+                    editTargetCoinId: '',
+                    editTargetCoinName: '',
+                    editTargetBuyDate: '',
+                    editTargetValueWhenBought: '',
+                    editTargetCurrentValue: '',
+                    editTargetAmount: ''
+                })
+                this.props.hideEditCoinModal();
+                this.props.refreshWalletCoins();
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     }
 
     updateCoinData = () => {
@@ -189,6 +213,8 @@ class EditCoinForm extends Component {
                     variant="outlined"
                     onChange={this.onChangeAmount}
                     value={this.state.editTargetAmount}
+                    error={this.state.editTargetAmountError}
+                    helperText={this.state.editTargetAmountErrorMessage}
                     />
                 </div>
                 <div className="buttons-wrap">
