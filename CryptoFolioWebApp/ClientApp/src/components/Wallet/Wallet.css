@@ -108,3 +108,13 @@
 .button-wrapper h1 {
     padding-right: 10px;
 }
+
+.wallet {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.networth-graph {
+    padding: 30px;
+}

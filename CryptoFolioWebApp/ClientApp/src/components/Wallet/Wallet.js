@@ -201,9 +201,9 @@ class Wallet extends Component {
                                 {this.renderUserCoinsTable()}
                             </tbody>
                         </table>
-                    </div>
-                    <div className="networth-graph">
-                        <NetworthGraph key={1} walletId={this.state.walletId}/>
+                        <div className="networth-graph">
+                            <NetworthGraph key={1} walletId={this.state.walletId}/>
+                        </div>
                     </div>
                 </div>
                 <Modal className="modal" isOpen={this.state.addCoinModalIsOpen}>

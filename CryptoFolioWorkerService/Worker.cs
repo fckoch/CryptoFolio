@@ -140,7 +140,7 @@ namespace CryptoFolioWorkerService
 
 
                 //Checks last date updated and compares to current date
-                if (dbNetworth[^1].Date != new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, DateTime.Now.Hour, 0, 0))
+                if (dbNetworth[^1].Date != new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day))
                 {   
 
                     //Loops through wallets, calculates networth and add to db
@@ -160,7 +160,7 @@ namespace CryptoFolioWorkerService
                         Console.WriteLine($"Wallet {wallet.WalletId} has a networth of {walletNetWorth}");
                         networth.WalletId = wallet.WalletId;
                         networth.NetworthValue = walletNetWorth;
-                        networth.Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day, DateTime.Now.Hour, 0, 0);
+                        networth.Date = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.Today.Day);
                         dbContext.Networth.Add(networth);
                         networthAdd++;
                     }

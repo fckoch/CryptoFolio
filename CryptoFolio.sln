@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoFolioAPI", "WebAPI\CryptoFolioAPI.csproj", "{F6328A09-0998-4FEB-B891-3742D4A0C4A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoFolioWorkerService", "CryptoFolioWorkerService\CryptoFolioWorkerService.csproj", "{9530784F-2F09-4120-836A-E74404FD8AFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoFolioWorkerService", "CryptoFolioWorkerService\CryptoFolioWorkerService.csproj", "{9530784F-2F09-4120-836A-E74404FD8AFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApp", "WebApp\WebApp.csproj", "{DFB86951-A967-4ADC-8CF8-C31A6CA655C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoFolioWebApp", "CryptoFolioWebApp\CryptoFolioWebApp.csproj", "{36D5B4A1-79D8-4C2D-A3DB-65D18BEC1B48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{9530784F-2F09-4120-836A-E74404FD8AFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9530784F-2F09-4120-836A-E74404FD8AFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9530784F-2F09-4120-836A-E74404FD8AFC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFB86951-A967-4ADC-8CF8-C31A6CA655C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFB86951-A967-4ADC-8CF8-C31A6CA655C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFB86951-A967-4ADC-8CF8-C31A6CA655C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFB86951-A967-4ADC-8CF8-C31A6CA655C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36D5B4A1-79D8-4C2D-A3DB-65D18BEC1B48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36D5B4A1-79D8-4C2D-A3DB-65D18BEC1B48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36D5B4A1-79D8-4C2D-A3DB-65D18BEC1B48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36D5B4A1-79D8-4C2D-A3DB-65D18BEC1B48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
