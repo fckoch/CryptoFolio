@@ -42,6 +42,7 @@ namespace WebAPI
             services.AddScoped<WalletService>();
             services.AddScoped<WalletCoinService>();
             services.AddScoped<CoinService>();
+            services.AddScoped<NetworthService>();
             services.AddAutoMapper(typeof(Startup));
 
             services.Configure<Settings>(_configuration.GetSection("Settings"));

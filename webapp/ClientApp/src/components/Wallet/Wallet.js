@@ -9,6 +9,7 @@ import Button from "../Button/Button.js";
 import axios from "axios";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import NetworthGraph from "../NetworthGraph/NetworthGraph.js";
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -135,7 +136,7 @@ class Wallet extends Component {
         return this.state.walletCoins.map((coin, index) => {
             const { coinId, coinName, buyDate, valueWhenBought, currentValue, amount, walletCoinId } = coin
             return (
-                <tr>
+                <tr key={index}>
                     <td className="td-left">{coinName}</td>
                     <td className="td-center">{amount}</td>
                     <td className="td-right">{this.applyUSDFormat(valueWhenBought)}</td>
@@ -200,6 +201,9 @@ class Wallet extends Component {
                                 {this.renderUserCoinsTable()}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="networth-graph">
+                        <NetworthGraph key={1} walletId={this.state.walletId}/>
                     </div>
                 </div>
                 <Modal className="modal" isOpen={this.state.addCoinModalIsOpen}>
