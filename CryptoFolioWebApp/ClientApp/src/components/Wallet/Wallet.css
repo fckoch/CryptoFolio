@@ -118,3 +118,9 @@
 .networth-graph {
     padding: 30px;
 }
+
+.no-coin-message {
+    display: inline-block;
+    padding-top: 300px;
+    font-size: 2rem;
+}

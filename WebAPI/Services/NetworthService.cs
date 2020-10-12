@@ -24,7 +24,7 @@ namespace CryptoFolioAPI.Services
         public async Task<Networth[]> GetNetworthByWalletIdAsync(int walletId)
         {
             IQueryable<Networth> query = _context.Networth;
-            query = query.Where(n => n.WalletId == walletId);
+            query = query.Where(n => n.WalletId == walletId).OrderBy(d => d.Date);
             return await query.ToArrayAsync();
         }
     }

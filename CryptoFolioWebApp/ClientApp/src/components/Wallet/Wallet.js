@@ -46,6 +46,8 @@ class Wallet extends Component {
             editTargetAmount: '',
             editTargetWalletCoinId: ''
         }
+
+        this.calculateNetWorth = this.calculateNetWorth.bind(this);
     }
 
     componentDidMount() {
@@ -58,7 +60,6 @@ class Wallet extends Component {
                 userName: response.data.firstName,
                 walletId: response.data.wallet.walletId,
                 walletCoins: response.data.wallet.walletcoins,
-
             })
             this.calculateNetWorth();
         })();
@@ -106,7 +107,7 @@ class Wallet extends Component {
         })
     }
 
-    calculateNetWorth = () => {
+    calculateNetWorth() {
         const networth = this.state.walletCoins.reduce((sum, coin) => {
             return sum + (coin.amount * coin.currentValue);
         }, 0);
@@ -121,6 +122,7 @@ class Wallet extends Component {
         this.refreshWalletCoins();
         })();
     }
+    
 
     applyUSDFormat = (data) => {
         return Intl.NumberFormat(
@@ -183,6 +185,7 @@ class Wallet extends Component {
                             </div>
                         </div>
                     </header>
+                    {this.state.walletCoins.length > 0 ? 
                     <div className="wallet">
                         <table className="wallet-table">
                             <thead className="wallet-table-header">
@@ -202,9 +205,13 @@ class Wallet extends Component {
                             </tbody>
                         </table>
                         <div className="networth-graph">
-                            <NetworthGraph key={1} walletId={this.state.walletId}/>
+                            {this.state.walletCoins.length > 0 ? 
+                            <NetworthGraph key={1} networth={this.state.networth} calculateNetWorth={this.calculateNetWorth}/>
+                            : '' }
                         </div>
                     </div>
+                    :
+                    <p className="no-coin-message">It seems you don't have any coins yet, add a new one clicking on the button above.</p>}
                 </div>
                 <Modal className="modal" isOpen={this.state.addCoinModalIsOpen}>
                     <AddCoinForm walletid={this.state.walletId} showAddCoinModal={this.showAddCoinModal} hideAddCoinModal={this.hideAddCoinModal} refreshWalletCoins={this.refreshWalletCoins}/>
