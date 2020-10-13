@@ -7,39 +7,32 @@ import './Navbar.css';
 class Navbar extends Component {
     constructor(props) {
         super();
-        this.onSignOutClick = this.onSignOutClick.bind(this);
         this.state = {
             clicked: false
         }
     }
 
     handleClick = () => {
-        this.setState({ clicked: !this.state.clicked })
-        console.log(this.props.isSignedIn);
+        this.setState({ 
+            clicked: !this.state.clicked 
+        });
     }
 
     componentDidMount() {
         const user = AuthService.getTokenData();
-        console.log(user);
         if (user) {
             this.props.onUserChange('signin');
         }
     }
 
-    onSignOutClick(e) {
-        //e.preventDefault()
+    onSignOutClick = (e) => {
         AuthService.logout();
         this.props.onUserChange('signout');
     }
 
     render() {
         let menutype;
-        if (this.props.isSignedIn) {
-            menutype = logedIn
-        }
-        else {
-            menutype = logedOut
-        }
+        this.props.isSignedIn === true ? menutype = logedIn : menutype = logedOut;
 
         return (
             <nav className="NavbarItems">

@@ -1,33 +1,35 @@
 import React, { Component } from 'react';
+import CoinService from '../../services/coinService.js';
 import './TopCoinTable.css';
 
 class TopCoinTable extends Component {
     constructor(props) {
         super();
         this.state = {
-            totalReactPackages: null,
-            errorMessage: null,
             coins: []
         }
     }
 
     componentDidMount() {
-        fetch('https://localhost:5001/api/coins?pageNumber=1&pageSize=10')
-            .then(async response => {
-                const data = await response.json();
-                this.setState({coins: [...data.coins]});
-                console.log(data);
-            if (!response.ok) {
-                const error = (data && data.message) || response.statusText;
-                return Promise.reject(error);
+        (async () => {
+            try {
+                const response = await CoinService.getCoinPageData(1,10);
+                this.setState({
+                    coins: response.data.coins,
+                })
             }
+            catch (error) {
+                console.log('There was an error!', error)
+            }
+        })();
+    }
 
-            this.setState({ totalReactPackages: data.total })
-            })
-            .catch(error => {
-                this.setState({ errorMessage: error.toString() });
-                console.error('There was an error!', error);
-            });
+    applyUSDFormat = (data) => {
+        return Intl.NumberFormat(
+            'en-US',
+            {style: 'currency',
+            currency: 'USD',})
+            .format(data);
     }
 
     renderTopCoinTableHeader() {
@@ -52,16 +54,8 @@ class TopCoinTable extends Component {
                     <td className="td-coin-icon"><img className="coin-icon-img" src={require(`./Icons/${symbol}.png`)}/></td>
                     <td className="td-left">{ symbol }</td>
                     <td className="td-left">{ coinName }</td>
-                    <td className="td-right">{ Intl.NumberFormat(
-                    'en-US',
-                    {style: 'currency',
-                    currency: 'USD',})
-                    .format(marketCap) }</td>
-                    <td className="td-right">{ Intl.NumberFormat(
-                    'en-US', 
-                    {style: 'currency',
-                    currency: 'USD',})
-                    .format(currentValue) }</td>
+                    <td className="td-right">{ this.applyUSDFormat(marketCap) }</td>
+                    <td className="td-right">{ this.applyUSDFormat(currentValue) }</td>
                     <td className={priceChangePct > 0 ? "green-pct-change" : "red-pct-change"}>{ (Math.round(priceChangePct*100000)/1000).toFixed(2) + " %"}</td>
                 </tr>
             )

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,11 +8,10 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import './RegisterForm.css';
-import { Redirect } from "react-router-dom";
 import AuthService from '../../services/authenticationService.js'
+import { withStyles } from '@material-ui/core/styles';
+import './RegisterForm.css';
 
 const styles = theme => ({
   paper: {
@@ -36,12 +36,6 @@ const styles = theme => ({
 class SignUp extends Component {
   constructor(props) {
     super()
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChangeFirstName = this.onChangeFirstName.bind(this);
-    this.onChangeLastName = this.onChangeLastName.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-
     this.state = {
       firstName: '',
       firstNameError: false,
@@ -57,29 +51,30 @@ class SignUp extends Component {
       passwordErrorMessage: '',
       formMessage: '',
       succesful: false,
-      cssboxtype: 'result-box-none'
+      cssboxtype: 'result-box-none',
+      redirect: ''
     }
   }
   
-  onChangeFirstName(e) {
+  onChangeFirstName = (e) => {
     this.setState({
       firstName: e.target.value
     });
   }
 
-  onChangeLastName(e) {
+  onChangeLastName = (e) => {
     this.setState({
       lastName: e.target.value
     });
   }
 
-  onChangeEmail(e) {
+  onChangeEmail = (e) => {
     this.setState({
       email: e.target.value
     });
   }
 
-  onChangePassword(e) {
+  onChangePassword = (e) => {
     this.setState({
       password: e.target.value
     });
@@ -118,13 +113,19 @@ class SignUp extends Component {
         emailErrorMessage: 'Please enter a valid e-mail',
       })
     }
-
     return isError;
   }
 
-  onSubmit(e) {
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to='/login' />
+    }
+  }
+
+  onSubmit = (e) => {
     e.preventDefault();
 
+    //Clear errors
     this.setState({
       firstNameError: false,
       firstNameErrorMessage: '',
@@ -140,28 +141,29 @@ class SignUp extends Component {
     const err = this.validate();
 
     if (!err) {
-      AuthService.register(
-        this.state.firstName,
-        this.state.lastName,
-        this.state.email,
-        this.state.password
-      )
-      .then(
-          response => {
-            if (response.status >= 200 && response.status < 300) {
-              this.setState({
-                succesful: true,
-                formMessage: 'User registered sucessfully.',
-                boxcsstype: 'result-box-sucess',
-                firstName: '',
-                lastName: '',
-                email: '',
-                password: ''
-              });
-            }
-          })
-      .catch((error) => {
-        console.log(error.response.status);
+      (async () => {
+        try {
+          const response = await AuthService.register(
+            this.state.firstName,
+            this.state.lastName,
+            this.state.email,
+            this.state.password 
+          );
+          if (response.status >= 200 && response.status < 300) {
+            this.setState({
+              //Clear form
+              succesful: true,
+              formMessage: 'User registered sucessfully.',
+              boxcsstype: 'result-box-sucess',
+              firstName: '',
+              lastName: '',
+              email: '',
+              password: '',
+              redirect: true
+            });
+          }
+        } 
+        catch (error) {
           if (error.response.status === 400) {
             this.setState({
               succesful: false,
@@ -169,15 +171,16 @@ class SignUp extends Component {
               boxcsstype: 'result-box-failure'
             });
           }
-
-          if (error.response.status === 500) {
+          else {
             this.setState({
               succesful: false,
               formMessage: 'Database failure.',
               boxcsstype: 'result-box-failure'
             });
+            console.log('There was an error!', error)
           }
-      })
+        }
+      })();
     }
   }
 
@@ -277,6 +280,7 @@ class SignUp extends Component {
               </Grid>
             </Grid>
           </form>
+          {this.renderRedirect()}
         </div> 
       </Container>
     )

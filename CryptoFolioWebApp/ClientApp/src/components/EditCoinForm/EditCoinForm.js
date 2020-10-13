@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete'; 
 import TextField from '@material-ui/core/TextField';
-import AppBar from '@material-ui/core/AppBar';  
-import Toolbar from '@material-ui/core/Toolbar'; 
-import axios from 'axios'; 
-import './EditCoinForm.css';
 import Button from "../Button/Button.js";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -13,8 +9,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import CoinService from '../../services/coinService.js'
 import WalletCoinService from '../../services/walletCoinService.js'
-
 import { withStyles } from '@material-ui/core/styles';
+import './EditCoinForm.css';
 
 const styles = theme => ({
     root: {
@@ -43,44 +39,35 @@ class EditCoinForm extends Component {
 
         this.state = {
             coinList: [],
-            loading: true,
-            walletId: '',
-            editTargetCoinId: '',
-            editTargetCoinName: '',
-            editTargetBuyDate: '',
-            editTargetValueWhenBought: '',
-            editTargetCurrentValue: '',
-            editTargetWalletCoinId: '',
-            editTargetAmount: '',
+            walletId: props.walletid,
+            editTargetCoinId: props.editTargetCoinId,
+            editTargetCoinName: props.editTargetCoinName,
+            editTargetBuyDate: props.editTargetBuyDate,
+            editTargetValueWhenBought: props.editTargetValueWhenBought,
+            editTargetCurrentValue: props.editTargetCurrentValue,
+            editTargetAmount: props.editTargetAmount,
+            editTargetWalletCoinId: props.editTargetWalletCoinId,
             editTargetAmountError: '',
             editTargetAmountErrorMessage: ''
         }
     }
 
     componentDidMount() {
-
-        this.setState({
-            walletId: this.props.walletid,
-            editTargetCoinId: this.props.editTargetCoinId,
-            editTargetCoinName: this.props.editTargetCoinName,
-            editTargetBuyDate: this.props.editTargetBuyDate,
-            editTargetValueWhenBought: this.props.editTargetValueWhenBought,
-            editTargetCurrentValue: this.props.editTargetCurrentValue,
-            editTargetAmount: this.props.editTargetAmount,
-            editTargetWalletCoinId: this.props.editTargetWalletCoinId
-        })
-        
-        let coinList = [];
-        let coin;
-
         (async () => {
-            const response = await axios.get('https://localhost:5001/api/coins/list')
-            for (coin of response.data) {
-                coinList.push(coin.coinName);
-                }
-            this.setState({
-                coinList: coinList,
-            })
+            try {
+                let coinList = [];
+                let coin;
+                const response = await CoinService.getCoinList();
+                for (coin of response.data) {
+                        coinList.push(coin.coinName);
+                    }
+                this.setState({
+                    coinList: coinList,
+                })
+            } 
+            catch (error) {
+                console.log('There was an error!', error)
+            }
         })();
     }
 
@@ -111,6 +98,7 @@ class EditCoinForm extends Component {
                 editTargetAmountErrorMessage: 'Please enter a valid number'
             })
         }
+        return isError;
     }  
 
     onSubmit = () => {
@@ -123,43 +111,52 @@ class EditCoinForm extends Component {
         const err = this.validate();
 
         if (!err) {
-
-            WalletCoinService.editCoin(
-                this.state.editTargetCoinId,
-                this.state.editTargetCoinName,
-                this.state.editTargetBuyDate,
-                this.state.editTargetValueWhenBought,
-                this.state.editTargetCurrentValue,
-                this.state.editTargetAmount,
-                this.state.walletId,
-                this.state.editTargetWalletCoinId
-
-            )
-            .then(response => {
-                console.log(response)
-                this.setState({
-                    editTargetCoinId: '',
-                    editTargetCoinName: '',
-                    editTargetBuyDate: '',
-                    editTargetValueWhenBought: '',
-                    editTargetCurrentValue: '',
-                    editTargetAmount: ''
-                })
-                this.props.hideEditCoinModal();
-                this.props.refreshWalletCoins();
-            }).catch(error => {
-                console.log(error);
-            })
+            (async () => {
+                try {
+                    const response = await WalletCoinService.editCoin(
+                        this.state.editTargetCoinId,
+                        this.state.editTargetCoinName,
+                        this.state.editTargetBuyDate,
+                        this.state.editTargetValueWhenBought,
+                        this.state.editTargetCurrentValue,
+                        this.state.editTargetAmount,
+                        this.state.walletId,
+                        this.state.editTargetWalletCoinId
+                    );
+                    //Clean form and close
+                    if (response.status === 200) {
+                        this.setState({
+                            editTargetCoinId: '',
+                            editTargetCoinName: '',
+                            editTargetBuyDate: '',
+                            editTargetValueWhenBought: '',
+                            editTargetCurrentValue: '',
+                            editTargetAmount: ''
+                        })
+                        this.props.hideEditCoinModal();
+                        this.props.refreshWalletCoins();
+                    }
+                } 
+                
+                catch (error) {
+                    console.log('There was an error!', error)
+                }
+            })();
         }
     }
 
     updateCoinData = () => {
-        CoinService.getCoinData(this.state.editTargetCoinName).then(response => {
-            this.setState({
-                editTargetValueWhenBought: response.data.currentValue,
-                editTargetCoinId: response.data.coinId
-            });
-        })
+        (async () => {
+            try {
+                const response = await CoinService.getCoinData(this.state.editTargetCoinName);
+                this.setState({
+                    editTargetValueWhenBought: response.data.currentValue,
+                    editTargetCoinId: response.data.coinId
+                })
+            } catch (error) {
+                console.log('There was an error!', error)
+            }
+        })();
     }
 
     render () {
@@ -174,7 +171,6 @@ class EditCoinForm extends Component {
                         options={this.state.coinList}
                         style={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Enter coin" variant="outlined" />}
-                        loading={this.state.loading}
                         loadingText='Loading...'
                         onChange={this.onChangeCoinName}
                         value={this.state.editTargetCoinName}

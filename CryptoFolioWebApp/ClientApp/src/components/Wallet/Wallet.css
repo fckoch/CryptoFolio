@@ -40,16 +40,6 @@
     padding: 20px;
 }
 
-.gains-table th {
-    padding: 5px;
-    display: none;
-}
-
-.gains-table td {
-    padding: 5px 17px;
-    display: none;
-}
-
 .wallet-table {
     border-collapse: collapse; 
     border-radius: 10px;

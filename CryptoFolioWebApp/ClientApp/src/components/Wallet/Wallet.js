@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 import AuthService from '../../services/authenticationService.js';
+import UserService from '../../services/userService.js';
 import WalletCoinService from '../../services/walletCoinService.js';
-import './Wallet.css';
 import AddCoinForm from '../AddCoinForm/AddCoinForm.js';
 import EditCoinForm from '../EditCoinForm/EditCoinForm.js';
 import Button from "../Button/Button.js";
-import axios from "axios";
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import NetworthGraph from "../NetworthGraph/NetworthGraph.js";
-
 import { withStyles } from '@material-ui/core/styles';
+import './Wallet.css';
 
 const styles = theme => ({
     DeleteOutlineIcon: {
@@ -29,7 +28,6 @@ const styles = theme => ({
 class Wallet extends Component {
     constructor(props) {
         super()
-
         this.state = {
             userId: '',
             userName: '',
@@ -46,33 +44,41 @@ class Wallet extends Component {
             editTargetAmount: '',
             editTargetWalletCoinId: ''
         }
-
-        this.calculateNetWorth = this.calculateNetWorth.bind(this);
     }
 
     componentDidMount() {
         const {nameid} = AuthService.getTokenData();
 
         (async () => { 
-            const response = await axios.get(`https://localhost:5001/api/users/${nameid}`)
-            this.setState({
-                userId: response.data.userId,
-                userName: response.data.firstName,
-                walletId: response.data.wallet.walletId,
-                walletCoins: response.data.wallet.walletcoins,
-            })
-            this.calculateNetWorth();
+            try {
+                const response = await UserService.getUserData(nameid);
+                this.setState({
+                    userId: response.data.userId,
+                    userName: response.data.firstName,
+                    walletId: response.data.wallet.walletId,
+                    walletCoins: response.data.wallet.walletcoins,
+                })
+                this.calculateNetWorth();
+            } 
+            catch (error) {
+                console.log('There was an error!', error)
+            }
         })();
 
     }
 
     refreshWalletCoins = () => {
         (async () => { 
-            const response = await axios.get(`https://localhost:5001/api/users/${this.state.userId}`)
-            this.setState({
-                walletCoins: response.data.wallet.walletcoins
-            })
-            this.calculateNetWorth();
+            try {
+                const response = await UserService.getUserWalletcoins(this.state.userId);
+                this.setState({
+                    walletCoins: response.data.wallet.walletcoins
+                })
+                this.calculateNetWorth();
+            } 
+            catch (error) {
+                console.log('There was an error!', error)
+            }
         })();
     }
 
@@ -107,7 +113,7 @@ class Wallet extends Component {
         })
     }
 
-    calculateNetWorth() {
+    calculateNetWorth = () => {
         const networth = this.state.walletCoins.reduce((sum, coin) => {
             return sum + (coin.amount * coin.currentValue);
         }, 0);
@@ -118,8 +124,12 @@ class Wallet extends Component {
 
     deleteCoin = (walletId, walletCoinId) => {
         (async () => {
-            await WalletCoinService.deleteCoin(walletId, walletCoinId);
-        this.refreshWalletCoins();
+            try {
+                await WalletCoinService.deleteCoin(walletId, walletCoinId);
+                this.refreshWalletCoins();
+            } catch (error) {
+                console.log('There was an error!', error)
+            }
         })();
     }
     
@@ -164,22 +174,6 @@ class Wallet extends Component {
                                 <h1>{this.state.userName}'s Wallet</h1>
                                 <Button className="add-coin-button" handleClick={this.showAddCoinModal} label="Add new coin" type="secundary"/>
                             </div>
-                            <div className="gains-wrapper">
-                                <table className="gains-table">
-                                    <tr>
-                                        <th>Ytd</th>
-                                        <th>30d</th>
-                                        <th>7d</th>
-                                        <th>24h</th>
-                                    </tr>
-                                    <tr>
-                                        <td>+150%</td>
-                                        <td>+80%</td>
-                                        <td>+28%</td>
-                                        <td>+7%</td>
-                                    </tr>
-                                </table>
-                            </div>
                             <div className="networth-wrapper">
                                 <h1>{ this.applyUSDFormat(this.state.networth)}</h1>
                             </div>
@@ -211,7 +205,7 @@ class Wallet extends Component {
                         </div>
                     </div>
                     :
-                    <p className="no-coin-message">It seems you don't have any coins yet, add a new one clicking on the button above.</p>}
+                    <p className="no-coin-message">It seems you don't have any coins yet, add a new one by clicking on the button above.</p>}
                 </div>
                 <Modal className="modal" isOpen={this.state.addCoinModalIsOpen}>
                     <AddCoinForm walletid={this.state.walletId} showAddCoinModal={this.showAddCoinModal} hideAddCoinModal={this.hideAddCoinModal} refreshWalletCoins={this.refreshWalletCoins}/>

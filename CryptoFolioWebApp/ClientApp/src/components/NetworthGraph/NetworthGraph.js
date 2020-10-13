@@ -20,9 +20,7 @@ const options = {
 class NetworthGraph extends Component {
     constructor(props) {
         super();
-        this.updateGraphic = this.updateGraphic.bind(this);
         this.state = {
-            walletId: '',
             networth: props.networth,
             chartOptions: {
                 title: {
@@ -80,28 +78,33 @@ class NetworthGraph extends Component {
         }   
     }
 
-    updateGraphic() {
+    updateGraphic = () => {
+        //Get wallet id by JWT token - certserialnumber = walletId
         const {certserialnumber} = AuthService.getTokenData();
-
+      
         let seriesData = [];
         let data;
 
         (async () => { 
-            const response = await NetworthService.getNetworthData(certserialnumber);
-            if (response.data.length > 0) {
-                for (data of response.data) {
-                    seriesData.push([Date.parse(data.date.slice(0,10)), data.networthValue]);
-                }
 
-                var lastItem = seriesData[seriesData.length-1];
-                console.log(typeof(this.props.networth));
-                seriesData[seriesData.length-1] = [lastItem[0], this.props.networth];
-
-                this.setState({
-                    chartOptions: {
-                        series: [{ data: seriesData, name: 'Networth'}]
+            try {
+                const response = await NetworthService.getNetworthData(certserialnumber);
+                if (response.data.length > 0) {
+                    for (data of response.data) {
+                        seriesData.push([Date.parse(data.date.slice(0,10)), data.networthValue]);
                     }
-                })
+                    var lastItem = seriesData[seriesData.length-1];
+                    //Adds current networth to last point on graphic
+                    seriesData[seriesData.length-1] = [lastItem[0], this.props.networth];
+                    this.setState({
+                        chartOptions: {
+                            series: [{ data: seriesData, name: 'Networth'}]
+                        }
+                    })
+                }
+            } 
+            catch (error) {
+                console.log('There was an error!', error)
             }
         })();
     }

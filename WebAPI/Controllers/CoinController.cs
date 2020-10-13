@@ -5,6 +5,7 @@ using CryptoFolioAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,11 +22,13 @@ namespace CryptoFolioAPI.Controllers
     {
         private readonly CoinService _coinService;
         private readonly IMapper _mapper;
+        private IMemoryCache _cache;
 
-        public CoinController(CoinService coinService, IMapper mapper)
+        public CoinController(CoinService coinService, IMapper mapper, IMemoryCache cache)
         {
             _coinService = coinService;
             _mapper = mapper;
+            _cache = cache;
         }
 
         //Get coins by pagination query

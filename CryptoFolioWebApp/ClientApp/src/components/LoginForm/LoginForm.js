@@ -3,15 +3,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import AuthService from '../../services/authenticationService.js'
+import { withStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom'
 
 const styles = theme => ({
@@ -37,10 +35,6 @@ const styles = theme => ({
 class SignIn extends Component {
   constructor(props) {
     super()
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangePassword = this.onChangePassword.bind(this);
-
     this.state = {
       email: '',
       emailError: false,
@@ -54,13 +48,13 @@ class SignIn extends Component {
     }
   }
 
-  onChangeEmail(e) {
+  onChangeEmail = (e) => {
     this.setState({
       email: e.target.value
     })
   }
 
-  onChangePassword(e) {
+  onChangePassword = (e) => {
     this.setState({
       password: e.target.value
     })
@@ -93,9 +87,10 @@ class SignIn extends Component {
     }
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
 
+    //Clear errors
     this.setState({
       emailError: false,
       emailErrorMessage: '',
@@ -107,40 +102,39 @@ class SignIn extends Component {
 
     const err = this.validate();
 
-
     if (!err) {
-      AuthService.login(
-        this.state.email, 
-        this.state.password
-      )
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          localStorage.setItem('user', JSON.stringify(response.data.token).replace(/\"/g,''));
-          this.setState({
-            email: '',
-            password: '',
-            formMessage: '',
-            boxcsstype: 'result-box-none',
-            redirect: true
-          })
-          this.props.onUserChange('signin');
-        };
-      })
-      .catch(error => {
-        if (error.response.status)
+
+      (async () => {
+        try {
+          const response = await AuthService.login(this.state.email, this.state.password);
+          if (response.status >=200 & response.status < 300) {
+            localStorage.setItem('user', JSON.stringify(response.data.token).replace(/\"/g,''));
+            //Clear form
+            this.setState({
+              email: '',
+              password: '',
+              formMessage: '',
+              boxcsstype: 'result-box-none',
+              redirect: true
+            })
+          this.props.onUserChange('signin');;
+          }
+        } 
+        catch (error) {
           if (error.response.status === 400) {
             this.setState({
               formMessage: error.response.data,
               boxcsstype: 'result-box-failure'
             })
           }
-        else {
-          console.log(error);
+          else {
+            console.log('There was an error!', error)
+          }
         }
-      });   
+      })();
     }
   }
-  
+    
   render() {
 
     const { classes } = this.props;
@@ -185,10 +179,6 @@ class SignIn extends Component {
               value={this.state.password}
               error={this.state.passwordError}
               helperText={this.state.PasswordErrorMessage}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
             />
             <Button
               type="submit"

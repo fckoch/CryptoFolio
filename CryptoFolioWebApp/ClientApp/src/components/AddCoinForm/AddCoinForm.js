@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete'; 
 import TextField from '@material-ui/core/TextField';
-import AppBar from '@material-ui/core/AppBar';  
-import Toolbar from '@material-ui/core/Toolbar'; 
-import axios from 'axios'; 
-import './AddCoinForm.css';
 import Button from "../Button/Button.js";
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -13,8 +9,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import CoinService from '../../services/coinService.js'
 import WalletCoinService from '../../services/walletCoinService.js'
-
 import { withStyles } from '@material-ui/core/styles';
+import './AddCoinForm.css';
 
 const styles = theme => ({
     root: {
@@ -43,8 +39,7 @@ class AddCoinForm extends Component {
 
         this.state = {
             coinList: [],
-            loading: true,
-            walletId: '',
+            walletId: props.walletid,
             coinName: '',
             coinId: '',
             buyPrice: '',
@@ -59,15 +54,18 @@ class AddCoinForm extends Component {
         let coin;
 
         (async () => {
-            const response = await axios.get('https://localhost:5001/api/coins/list')
-            for (coin of response.data) {
-                coinList.push(coin.coinName);
-                    //console.log(response.data[1].coinName)
-                }
-            this.setState({
-                coinList: coinList,
-                walletId: this.props.walletid,
-            })
+            try {
+                const response = await CoinService.getCoinList();
+                for (coin of response.data) {
+                        coinList.push(coin.coinName);
+                    }
+                this.setState({
+                    coinList: coinList
+                })
+            } 
+            catch (error) {
+                console.log('There was an error!', error)
+            }
         })();
     }
 
@@ -91,17 +89,19 @@ class AddCoinForm extends Component {
 
     validate = () => {
         let isError = false;
-        if (this.state.amount.length < 1 || (/[^0-9]/i.test(this.state.amount))){
+        if (this.state.amount.length < 1) {
             isError = true
             this.setState({
                 amountError: true,
                 amountErrorMessage: 'Please enter a valid number'
             })
+        return isError;
         }
     }   
 
     onSubmit = () => {
 
+        //Clear errors
         this.setState({
             amountError: false,
             amountErrorMessage: '',
@@ -111,34 +111,46 @@ class AddCoinForm extends Component {
 
         if (!err) {
 
-            WalletCoinService.addNewCoin(
-                this.props.walletid,
-                this.state.coinId,
-                this.state.buyPrice,
-                this.state.amount
-            ).then(response => {
-                console.log(response)
-                this.setState({
-                    coinName: '',
-                    coinId: '',
-                    buyPrice: '',
-                    quantity: '',
-                })
-                this.props.hideAddCoinModal();
-                this.props.refreshWalletCoins();
-            }).catch(error => {
-                console.log(error);
-            })
+            (async () => {
+                try {
+                    const response = await WalletCoinService.addNewCoin(
+                        this.state.walletId,
+                        this.state.coinId,
+                        this.state.buyPrice,
+                        this.state.amount
+                    );
+                    //Clean form and close
+                    if (response.status === 201) {
+                        this.setState({
+                            coinName: '',
+                            coinId: '',
+                            buyPrice: '',
+                            quantity: '',
+                        });
+                    }
+                    this.props.hideAddCoinModal();
+                    this.props.refreshWalletCoins(); 
+                } 
+                catch (error) {
+                    console.log('There was an error!', error)
+                }
+            })();
         }
     }
 
     updateCoinData = () => {
-        CoinService.getCoinData(this.state.coinName).then(response => {
-            this.setState({
-                buyPrice: response.data.currentValue,
-                coinId: response.data.coinId
-            });
-        })
+        (async () => {
+            try {
+                const response = await CoinService.getCoinData(this.state.coinName);
+                this.setState({
+                    buyPrice: response.data.currentValue,
+                    coinId: response.data.coinId
+                })
+            } 
+            catch (error) {
+                console.log('There was an error!', error)
+            }
+        })();
     }
 
     render () {
@@ -153,7 +165,6 @@ class AddCoinForm extends Component {
                         options={this.state.coinList}
                         style={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Enter coin" variant="outlined" />}
-                        loading={this.state.loading}
                         loadingText='Loading...'
                         onChange={this.onChangeCoinName}
                         value={this.state.coinName}

@@ -49,6 +49,8 @@ namespace WebAPI
 
             services.AddCors();
 
+            services.AddMemoryCache();
+
             services.AddMvc(config =>
             {
                 var policy = new AuthorizationPolicyBuilder()

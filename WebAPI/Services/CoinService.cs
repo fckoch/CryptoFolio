@@ -25,7 +25,7 @@ namespace CryptoFolioAPI.Services
         public async Task <PagedList<Coin>> GetCoinsByQuery (CoinParameters coinParameters)
         {
             IQueryable<Coin> query = _context.Coin;
-            query = query.OrderByDescending(c => c.MarketCap).Take(1000);
+            query = query.AsNoTracking().OrderByDescending(c => c.MarketCap);
 
             return await PagedList<Coin>.ToPagedListAsync(query, coinParameters.PageNumber, coinParameters.PageSize);
         }
@@ -53,7 +53,7 @@ namespace CryptoFolioAPI.Services
         public async Task<Coin[]> GetCoinsList()
         {
             IQueryable<Coin> query = _context.Coin;
-            query = query.OrderByDescending(c => c.MarketCap).Take(1000);
+            query = query.AsNoTracking().OrderByDescending(c => c.MarketCap).Take(1000);
             return await query.ToArrayAsync();
         }
 
