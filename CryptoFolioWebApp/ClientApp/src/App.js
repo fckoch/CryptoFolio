@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
+import {Route, BrowserRouter as Router, Switch, Redirect} from "react-router-dom";
 import Home from "./Pages/Home.js";
 import Coins from "./Pages/Coins.js";
 import Login from "./Pages/Login.js";
@@ -14,7 +14,7 @@ class App extends Component {
         this.state = {
             isSignedIn: false
         }
-    }   
+    }
 
     onUserChange = (action) => {
         if (action === 'signout') {
@@ -22,6 +22,14 @@ class App extends Component {
         } else if (action === 'signin') {
           this.setState({isSignedIn: true})
         }
+    }
+
+    SecuredRoute = (props) => {
+        return (
+            <Route path={props.path} render={data => this.state.isSignedIn ? 
+            (<props.component {...data}></props.component>) :
+            (<Redirect to={{pathname:'/login'}}></Redirect>)}></Route>
+        )
     }
 
     render() {
@@ -34,7 +42,7 @@ class App extends Component {
                         <Route path="/coins" component={Coins}/>
                         <Route path="/login" render={props => <Login onUserChange={this.onUserChange}/>}/>
                         <Route path="/register" component={Register}/>
-                        <Route path="/wallet" component={Wallet}/>
+                        <this.SecuredRoute path="/wallet" component={Wallet}></this.SecuredRoute>
                     </Switch>
                 </div>
             </Router>

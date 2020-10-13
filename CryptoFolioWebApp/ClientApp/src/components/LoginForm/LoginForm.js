@@ -77,7 +77,6 @@ class SignIn extends Component {
         PasswordErrorMessage: 'Please enter a password'
       })
     }
-
     return isError;
   }
 
@@ -110,6 +109,7 @@ class SignIn extends Component {
           if (response.status >=200 & response.status < 300) {
             localStorage.setItem('user', JSON.stringify(response.data.token).replace(/\"/g,''));
             //Clear form
+            this.props.onUserChange('signin');;
             this.setState({
               email: '',
               password: '',
@@ -117,7 +117,6 @@ class SignIn extends Component {
               boxcsstype: 'result-box-none',
               redirect: true
             })
-          this.props.onUserChange('signin');;
           }
         } 
         catch (error) {

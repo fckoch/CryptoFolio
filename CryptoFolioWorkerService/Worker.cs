@@ -172,7 +172,7 @@ namespace CryptoFolioWorkerService
 
                 }
 
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(180000, stoppingToken);
 
             }
         }

@@ -22,13 +22,11 @@ namespace CryptoFolioAPI.Controllers
     {
         private readonly CoinService _coinService;
         private readonly IMapper _mapper;
-        private IMemoryCache _cache;
 
-        public CoinController(CoinService coinService, IMapper mapper, IMemoryCache cache)
+        public CoinController(CoinService coinService, IMapper mapper)
         {
             _coinService = coinService;
             _mapper = mapper;
-            _cache = cache;
         }
 
         //Get coins by pagination query
