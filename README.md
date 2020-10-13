@@ -5,7 +5,7 @@ This project was built solely with the purpose of practicing my web development 
 Consists of 4 controllers with CRUD operations for User, Wallet, Coin and Networth models. Built with Entity Framework and SQL server.
 
 # WorkerService
-The worker service is constantly updating the user's networth and the coin prices trought calls on public APIs. 
+The worker service is constantly updating the user's networth and the coin prices trought calls on nomic's public API.
 
 # WebApp
 The WebApp contains 5 pages:
